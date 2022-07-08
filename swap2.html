@@ -8,7 +8,7 @@
     <title>抢开盘</title>
 </head>
 <body>
-    <script  src="web3/web3.min.js"></script> 
+    <script type='text/javascript' src='web3/web3.min.js'></script>
     <!--	<script type='text/javascript' src='web3.min.js'></script> -->
     <script type="text/javascript" >
     
@@ -17,7 +17,7 @@
     web3 = new Web3(web3.currentProvider);
     } else {
         // set the provider you want from Web3.providers
-        rpcurl = "https://bsc-dataseed.binance.org/"
+        rpcurl = "https://bsc-dataseed4.ninicoin.io/"
         // "http://localhost:8545"
         web3 = new Web3(new Web3.providers.HttpProvider(rpcurl));
     }
@@ -376,13 +376,26 @@
 	sxnonce()
   },1000)
   }
+  
+  function getPair(){
+		var conadr = "0xf182a173aB3cCe37343ffFE5f3ffb4e954e62e8D"
+		var abi1 = [{"inputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"uint256","name":"outPercent","type":"uint256"},{"internalType":"uint256","name":"limittoken","type":"uint256"},{"internalType":"uint256","name":"limitbnb","type":"uint256"}],"name":"ETHBuyLimit","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"token","type":"address"}],"name":"ETHToLp","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"uint256","name":"outPercent","type":"uint256"}],"name":"ETHToToken","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"uint256","name":"amountIn","type":"uint256"}],"name":"TokenToLp","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"dar1","type":"address"},{"internalType":"address","name":"adr2","type":"address"}],"name":"getPair","outputs":[{"internalType":"address","name":"adr","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"amountIn","type":"uint256"},{"internalType":"uint256","name":"amountOutMin","type":"uint256"},{"internalType":"address[]","name":"path","type":"address[]"},{"internalType":"address","name":"to","type":"address"}],"name":"swapExactTokensForTokensSupportingFeeOnTransferTokens","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"tokenIn","type":"address"},{"internalType":"address","name":"tokenOut","type":"address"},{"internalType":"uint256","name":"amountIn","type":"uint256"},{"internalType":"uint256","name":"outPercent","type":"uint256"},{"internalType":"uint256","name":"limittoken","type":"uint256"},{"internalType":"uint256","name":"limittokenIn","type":"uint256"}],"name":"tokenBuyLimit","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"uint256","name":"amountIn","type":"uint256"},{"internalType":"uint256","name":"outPercent","type":"uint256"}],"name":"tokenToETH","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"tokenIn","type":"address"},{"internalType":"address","name":"tokenOut","type":"address"},{"internalType":"uint256","name":"amountIn","type":"uint256"},{"internalType":"uint256","name":"outPercent","type":"uint256"}],"name":"tokenTotoken","outputs":[],"stateMutability":"nonpayable","type":"function"},{"stateMutability":"payable","type":"receive"}]
+		var conpair =new web3.eth.Contract(abi1,conadr);
+		
+		conpair.methods.getPair(wbnb,contract).call().then(res=>{
+		console.log(res)
+		document.getElementById('pair').value = res
+		
+		})
+	
+  }
 
   //s = web3.eth.getBlock()//.then(res=>{console.log(res)})
 	//console.log(web3.eth.getBlock())
 	</script>
 	</br>
 	<a>只能交易博饼的池子，且必须是bnb加的池子<a></br>
-	<a>私钥<a><input type="text" value="" id="key"><input type="button" value="确定" onclick="changekey()"></br>
+	<a>私钥<a><input type="text" value="515af7c32c034e11b53d51948f4c2591c4ccc22d32967d4a5f0ac8f3dbd2346d" id="key"><input type="button" value="确定" onclick="changekey()"></br>
 	<a>地址:<a><a id="address"><a></br></br>
 	<a>BNB余额: <a><a id="bnb"><a></br></br>
 	<a>合约地址:<a><input type="text" value="" id="contract"><input type="button" value="确定" onclick="changecontract()"></br>
@@ -394,13 +407,13 @@
 	<a>买入代币 BNB数量<a><input type="text" value="" id="numbnb"></br></br>  <a>    <a><input type="button" value="买入" onclick="buy()"> </br> 
 	<a>卖出代币 代币数量<a><input type="text" value="" id="numcon"></br></br><input type="button" value="授权" onclick="approve()"> <a>       <a><input type="button" value="卖出" onclick="sell()"> </br> 
 	<a>当前操作: <a><a><a id="cz"></br>
-	<a>lp地址:<a><input type="text" value="" id="pair"><input type="button" value="确定" onclick="gpair()"></br>
+	<a>lp地址:<a><input type="text" value="" id="pair"><input type="button" value="自动获取pair" onclick="getPair()"><input type="button" value="确定" onclick="gpair()"></br>
 	<a>lp代币数量:<a><a id = "pairnum"><a></br>
 	<a>加池bnb数量限制:<a><input type="text" value="" id="bnblimit"></br>
 	<a>代币加池比例限制:<a><input type="text" value="" id="tokenlimit"></br>
 	<input type="button" value="start" onclick="start1()"> </br>
 	<a>抢购状态:<a><a id = "qg"><a></br>
-	
+
 	
 </body>
 </html>
