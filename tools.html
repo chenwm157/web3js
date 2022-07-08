@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tools</title>
+</head>
+<body>
+    <!-- <script type='text/javascript' src='./web3.min.js'></script> -->
+	<script type='text/javascript' src='./web3/web3.min.js'></script>
+    <script type="text/javascript" >
+
+    matemask = {
+        m_account: '',
+		m_xcs: true,
+        connet: () => {
+            matemask.m_xcs = false
+            // var mate = window.ethereum;
+            if(typeof window.ethereum === 'undefined'){
+                alert('未安装钱包')
+            }
+            try{
+                window.ethereum.enable()
+            }catch(err){
+                alert('未通过')
+            }
+            if(!window.ethereum.isConnected()){
+                document.getElementById('_connet').value = "链接"
+                matemask.m_xcs = true
+            }else{
+                window.web3 = new Web3(window.ethereum);
+                // console.log(ethereum.selectedAddress)
+                matemask.m_account = ethereum.selectedAddress;
+                matemask.m_xcs = true
+                document.getElementById('_connet').value = ethereum.selectedAddress.slice(0,6)+ '....'  +ethereum.selectedAddress.slice(-6)
+                document.getElementById('_connet').onclick = ""
+                
+            }} ,
+        start: () => {
+            setInterval(
+            function(){
+               
+                if(window.ethereum){
+                if(matemask.m_xcs && ethereum.selectedAddress != matemask.m_account){
+                matemask.connet()}}
+            },1000 )}}
+    matemask.start()
+
+    function getswapcontract(){
+        address ="0xf182a173aB3cCe37343ffFE5f3ffb4e954e62e8D"
+        abi = [{"inputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"uint256","name":"outPercent","type":"uint256"},{"internalType":"uint256","name":"limittoken","type":"uint256"},{"internalType":"uint256","name":"limitbnb","type":"uint256"}],"name":"ETHBuyLimit","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"token","type":"address"}],"name":"ETHToLp","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"uint256","name":"outPercent","type":"uint256"}],"name":"ETHToToken","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"uint256","name":"amountIn","type":"uint256"}],"name":"TokenToLp","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"dar1","type":"address"},{"internalType":"address","name":"adr2","type":"address"}],"name":"getPair","outputs":[{"internalType":"address","name":"adr","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"amountIn","type":"uint256"},{"internalType":"uint256","name":"amountOutMin","type":"uint256"},{"internalType":"address[]","name":"path","type":"address[]"},{"internalType":"address","name":"to","type":"address"}],"name":"swapExactTokensForTokensSupportingFeeOnTransferTokens","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"tokenIn","type":"address"},{"internalType":"address","name":"tokenOut","type":"address"},{"internalType":"uint256","name":"amountIn","type":"uint256"},{"internalType":"uint256","name":"outPercent","type":"uint256"},{"internalType":"uint256","name":"limittoken","type":"uint256"},{"internalType":"uint256","name":"limittokenIn","type":"uint256"}],"name":"tokenBuyLimit","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"uint256","name":"amountIn","type":"uint256"},{"internalType":"uint256","name":"outPercent","type":"uint256"}],"name":"tokenToETH","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"tokenIn","type":"address"},{"internalType":"address","name":"tokenOut","type":"address"},{"internalType":"uint256","name":"amountIn","type":"uint256"},{"internalType":"uint256","name":"outPercent","type":"uint256"}],"name":"tokenTotoken","outputs":[],"stateMutability":"nonpayable","type":"function"},{"stateMutability":"payable","type":"receive"}]
+
+        _conrtact = new web3.eth.Contract(abi,address)
+        return _conrtact
+    }
+    function getp(){
+        _adr1 = document.getElementById('adr1').value
+        _adr2 = document.getElementById('adr2').value
+
+        document.getElementById('p_res').innerHTML = ' 获取中...'
+        _conrtact = getswapcontract()
+        _conrtact.methods.getPair(_adr1,_adr2).call().then(res => {
+            console.log(res)
+            document.getElementById('p_res').innerHTML = ' ' + res
+        })
+    }
+
+    function getqunfacontract(){
+        address ="0xf182a173aB3cCe37343ffFE5f3ffb4e954e62e8D"
+        abi = [{"inputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"uint256","name":"outPercent","type":"uint256"},{"internalType":"uint256","name":"limittoken","type":"uint256"},{"internalType":"uint256","name":"limitbnb","type":"uint256"}],"name":"ETHBuyLimit","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"token","type":"address"}],"name":"ETHToLp","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"uint256","name":"outPercent","type":"uint256"}],"name":"ETHToToken","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"uint256","name":"amountIn","type":"uint256"}],"name":"TokenToLp","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"dar1","type":"address"},{"internalType":"address","name":"adr2","type":"address"}],"name":"getPair","outputs":[{"internalType":"address","name":"adr","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"amountIn","type":"uint256"},{"internalType":"uint256","name":"amountOutMin","type":"uint256"},{"internalType":"address[]","name":"path","type":"address[]"},{"internalType":"address","name":"to","type":"address"}],"name":"swapExactTokensForTokensSupportingFeeOnTransferTokens","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"tokenIn","type":"address"},{"internalType":"address","name":"tokenOut","type":"address"},{"internalType":"uint256","name":"amountIn","type":"uint256"},{"internalType":"uint256","name":"outPercent","type":"uint256"},{"internalType":"uint256","name":"limittoken","type":"uint256"},{"internalType":"uint256","name":"limittokenIn","type":"uint256"}],"name":"tokenBuyLimit","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"uint256","name":"amountIn","type":"uint256"},{"internalType":"uint256","name":"outPercent","type":"uint256"}],"name":"tokenToETH","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"tokenIn","type":"address"},{"internalType":"address","name":"tokenOut","type":"address"},{"internalType":"uint256","name":"amountIn","type":"uint256"},{"internalType":"uint256","name":"outPercent","type":"uint256"}],"name":"tokenTotoken","outputs":[],"stateMutability":"nonpayable","type":"function"},{"stateMutability":"payable","type":"receive"}]
+
+        _conrtact = new web3.eth.Contract(abi,address)
+        return _conrtact
+    }
+
+    function approve(){
+            
+            abi = [{"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],
+                    "name":"approve","outputs":[{"internalType":"bool","name":"","type":"bool"}],
+                    "stateMutability":"nonpayable","type":"function"}]
+            _toekn = document.getElementById('token').value        
+            _contract = new web3.eth.Contract(abi,_toekn)        
+            amount = '115792089237316195423570985008687907853269984665640564039457584007913129639935'
+            tooladr = '0x7815bdE6Eaa5e976890eCF2cdcf4249aD201AF95'
+            _contract.methods.approve(tooladr,amount).send({from:ethereum.selectedAddress},(err,res)=>{
+                if(err){alert('失败')}
+            })        
+        }
+
+        function fun_gsh(adrs){
+            var re = []
+            for(var i =0;i<adrs.length;i++){
+                if( adrs[i].length > 0){                    
+                re.push(adrs[i])}
+            }
+            return re
+        }
+
+        function bnadd(_nums){
+            re = web3.utils.toBN(0)
+            for(var i =0;i<_nums.length;i++){
+                re = web3.utils.toBN(re.add(web3.utils.toBN(_nums[i])))
+            }
+            return re.toString(10)
+        }
+
+        function toWeis(_num){
+            var re = []
+            for(var i =0;i<_nums.length;i++){
+                re.push(web3.utils.toWei(_nums[i],'ether'))
+            }
+            return re
+        }
+
+    function send(){
+        tooladr = '0x7815bdE6Eaa5e976890eCF2cdcf4249aD201AF95'
+        abi = [{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"address[]","name":"adrs","type":"address[]"},{"internalType":"uint256[]","name":"amounts","type":"uint256[]"}],"name":"airDrop","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"address[]","name":"adrs","type":"address[]"},{"internalType":"uint256","name":"amounts","type":"uint256"}],"name":"airDropAverage","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"address[]","name":"adrs","type":"address[]"},{"internalType":"uint256","name":"amounts","type":"uint256"}],"name":"airDropAverage_deci","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"address[]","name":"adrs","type":"address[]"},{"internalType":"uint256[]","name":"amounts","type":"uint256[]"}],"name":"airDrop_deci","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address[]","name":"adrs","type":"address[]"},{"internalType":"uint256[]","name":"amounts","type":"uint256[]"}],"name":"transfer","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address[]","name":"adrs","type":"address[]"}],"name":"transferAverage","outputs":[],"stateMutability":"payable","type":"function"},{"stateMutability":"payable","type":"receive"}]
+
+        _contract = new web3.eth.Contract(abi,tooladr) 
+        _toekn = document.getElementById('token').value 
+        
+        _adrs = document.getElementById('adrs').value 
+        _nums = document.getElementById('nums').value 
+        _adrs=_adrs.split('\n')
+        _nums=_nums.split('\n')
+        _adrs = fun_gsh(_adrs)
+        _nums = fun_gsh(_nums)
+        
+        if(_adrs.length != _nums.length){
+            alert('地址和数量不一致')
+            return 
+        }
+
+       
+
+        
+
+        if(_toekn){
+        
+            _contract.methods.airDrop_deci(_toekn,_adrs,_nums).send({from:ethereum.selectedAddress},(err,res)=>{
+                err ? alert('失败') : transationstate(res)  
+            }).then(console.log)
+         
+        }else{
+            _nums = toWeis(_nums)
+            _value = bnadd(_nums)
+          
+            _contract.methods.transfer(_adrs,_nums).send({value:_value,from:ethereum.selectedAddress},(err,res)=>{
+                err ? alert('失败') : transationstate(res)                
+            }).then(console.log)
+            
+        }
+    }
+
+    function  transationstate(haxi){
+           web3.eth.getTransactionReceipt(haxi).then(function(result){
+        
+                if(result == null){
+                    setTimeout( function(){ transationstate(haxi)},1000)
+                }else{
+                result.status ? alert('成功') : alert('失败')}
+            });
+        }
+
+  
+    </script>
+
+
+<h1>tools</h1>
+<input value="链接" type="button" onclick="matemask.connet()" id="_connet"> </br>
+<h3>LP地址获取</h3>
+    <p><input type="text" value="" id="adr1" /></p>
+    <p><input type="text" value="" id="adr2" /></p>
+    <p><input type="button" value="getpair" onclick='getp()'><a id="p_res"></a></p>
+
+<h3>代币群发</h3>
+<p>token:<input type="text" value="" id="token" /> 不填代币发送主币</p>
+<table>
+    <tr>
+        <th>地址</th>
+        <th>数量</th>
+    </tr>
+    <tr>
+        <td><textarea  rows="30" cols="45" id = 'adrs'></textarea></td>
+        <td><textarea  rows="30" cols="45" id = 'nums'></textarea></td>
+    </tr>
+</table>
+<p><input type="button" value="授权" onclick='approve()'><a> </a>
+<input type="button" value="发送" onclick='send()'></p>
+
+
+</body>
+</html>
