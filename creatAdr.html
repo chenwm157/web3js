@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>地址器</title>
+</head>
+<body>
+    
+    <script type='text/javascript' src='./web3/web3.min.js'></script>
+    <script type="text/javascript" >
+        if (typeof web3 !== 'undefined') {
+        web3 = new Web3(web3.currentProvider);
+        } else {
+            // set the provider you want from Web3.providers
+            rpcurl = "https://bsc-dataseed.binance.org/"
+            // "http://localhost:8545"
+            web3 = new Web3(new Web3.providers.HttpProvider(rpcurl));
+        }
+
+        _chainID = 56
+
+        var strs = ['0','1','2','3','4','5','6','7','8','9','a','b','c','e','d','f']
+        
+        var re 
+        var key
+
+        function get_addrs() {
+        re = ''
+     
+        for(var i=0;i<50;i++){
+            key = '0x'
+            for(var j=0;j<64;j++){
+            var n = Math.round(Math.random()*15)
+            key += strs[n]
+           // console.log(strs[n])
+        } 
+        //console.log(key)
+
+        var address = web3.eth.accounts.privateKeyToAccount(key).address
+      //  re += '\n'
+      //  re += key 
+      //  re += '\n'
+      //  re += address
+	 hg = '</br>'
+	 
+	 document.write(key)
+	 document.write(hg)
+	 document.write(address)
+     document.write(hg)
+	
+        }
+        //document.getElementById('sss').text = 'ss'
+        //document.getElementById('re').text = re
+        //console.log(re)
+
+        }
+    </script>
+
+    <input type="button" value="获取批量地址" onclick="get_addrs()">
+    </br>
+    <a id="re"> <a></a>
+    
+</body>
+</html>
