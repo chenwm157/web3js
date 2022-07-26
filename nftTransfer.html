@@ -79,9 +79,9 @@
 	}
 ]
 transation = async ()=>{
-          conadr = window.document.getElementById('id_contract')  
-          to = window.document.getElementById('id_to')
-          tokenid = window.document.getElementById('id_tokenid')
+          conadr = window.document.getElementById('id_contract').value  
+          to = window.document.getElementById('id_to').value
+          tokenid = window.document.getElementById('id_tokenid').value
 
           _contract = new web3.eth.Contract(abi,conadr)
           res = await _contract.methods.transferFrom(ethereum.selectedAddress,to,tokenid).send({from:ethereum.selectedAddress})
