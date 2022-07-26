@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>getpinksale</title>
+</head>
+<body>
+    <script src="https://cdn.bootcdn.net/ajax/libs/web3/1.7.4/web3.min.js"></script>
+    <script type="text/javascript" >
+    
+   
+    if (typeof web3 !== 'undefined') {
+    web3 = new Web3(web3.currentProvider);
+    } else {
+        // set the provider you want from Web3.providers
+        rpcurl = "https://bsc-dataseed3.ninicoin.io/"
+        // "http://localhost:8545"
+        web3 = new Web3(new Web3.providers.HttpProvider(rpcurl));
+    }
+
+	_chainID = 56
+
+    address=''
+
+    erc20abi = [
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "spender",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "value",
+				"type": "uint256"
+			}
+		],
+		"name": "Approval",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "from",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "value",
+				"type": "uint256"
+			}
+		],
+		"name": "Transfer",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "spender",
+				"type": "address"
+			}
+		],
+		"name": "allowance",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "spender",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "value",
+				"type": "uint256"
+			}
+		],
+		"name": "approve",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			}
+		],
+		"name": "balanceOf",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "decimals",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "name",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "symbol",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "totalSupply",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "value",
+				"type": "uint256"
+			}
+		],
+		"name": "transfer",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "from",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "value",
+				"type": "uint256"
+			}
+		],
+		"name": "transferFrom",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	}
+]
+
+const toDeci = (num,desi) =>{
+  let re
+  let re2
+  if(num.indexOf('.') !== -1){
+    re = num.split('.')
+    if(re[1].length > desi)re[1] = re[1].slice(0,desi)
+    re2 = re[0] + re[1] +  jia0(desi,re[1].length)
+  }else{
+    re2 = num + jia0(desi,0)
+  }
+  return re2
+}
+const redeci = (num,decis)=>{
+  let re
+  if(num.length <= decis){
+  re = "0." + jia0(decis , num.length) + num
+  return re
+  }
+  re = num.slice(num.length - decis,num.length)
+  re = num.slice(0,num.length - decis) + "." + num.slice(num.length - decis,num.length)
+  return re
+}
+const jia0 = (decimal,len)=>{let re;let i;re = "";for(i=0;i<decimal - len ;i++){re+="0"}return re }
+
+
+    async function getbalance(currentAccount){
+ 
+		let res = await web3.eth.getBalance(currentAccount)
+        window.document.getElementById('bnb').innerHTML = web3.utils.fromWei(res,'ether')
+    }
+ 
+
+   function changeadr(){
+        address = document.getElementById('address').value
+        getbalance(address)
+   }
+
+   async function geterc20(){
+        adrerc20 = document.getElementById('erc20').value
+        _contract =new web3.eth.Contract(erc20abi,adrerc20)
+        let res = await _contract.methods.balanceOf(address).call()
+        let desi = await _contract.methods.decimals().call()
+        window.document.getElementById('erc').innerHTML = redeci(res,desi)
+   }
+
+    
+    
+
+	</script> 
+<a>地址<a><input type="text" value="" id="address"><input type="button" value="确定" onclick="changeadr()"></br>
+<a>BNB余额: <a><a id="bnb"><a></br></br>
+<a>合约<a><input type="text" value="" id="erc20"><input type="button" value="确定" onclick="geterc20()"></br>
+<a>代币余额: <a><a id="erc"><a></br></br>
+
+</body>
+</html>
