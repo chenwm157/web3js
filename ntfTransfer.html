@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>nftTransfer</title>
+</head>
+<body>
+    <h2>NTF 转账</h2>
+    <p><input value="链接" type="button" onclick="matemask.connet()" id="_connet"></p>
+    <p><span>合约地址：</span><input type="text" name="" id="id_contract"></p>
+    <p><span>to     :</span><input type="text" name="" id="id_to"></p>
+    <p><span>tokenId:</span><input type="text" name="" id="id_tokenid"></p>
+    <p><input type="button" onClick="transation()" value="转账" name="" id=""></p>
+    <p><span id="id_res"></span></p>
+
+    <script src="https://cdn.bootcdn.net/ajax/libs/web3/1.7.4/web3.min.js"></script>
+    <script>
+        matemask = {
+        m_account: '',
+		m_xcs: true,
+        connet: () => {
+            matemask.m_xcs = false
+            // var mate = window.ethereum;
+            if(typeof window.ethereum === 'undefined'){
+                alert('未安装钱包')
+            }
+            try{
+                window.ethereum.enable()
+            }catch(err){
+                alert('未通过')
+            }
+            if(!window.ethereum.isConnected()){
+                document.getElementById('_connet').value = "链接"
+                matemask.m_xcs = true
+            }else{
+                window.web3 = new Web3(window.ethereum);
+                // console.log(ethereum.selectedAddress)
+                matemask.m_account = ethereum.selectedAddress;
+                matemask.m_xcs = true
+                document.getElementById('_connet').value = ethereum.selectedAddress.slice(0,6)+ '....'  +ethereum.selectedAddress.slice(-6)
+                document.getElementById('_connet').onclick = ""
+                
+            }} ,
+        start: () => {
+            setInterval(
+            function(){
+               
+                if(window.ethereum){
+                if(matemask.m_xcs && ethereum.selectedAddress != matemask.m_account){
+                matemask.connet()}}
+            },1000 )}}
+    matemask.start()
+
+        abi=[
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "from",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "transferFrom",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	}
+]
+transation = async ()=>{
+          conadr = window.document.getElementById('id_contract')  
+          to = window.document.getElementById('id_to')
+          tokenid = window.document.getElementById('id_tokenid')
+
+          _contract = new web3.eth.Contract(abi,conadr)
+          res = await _contract.methods.transferFrom(ethereum.selectedAddress,to,tokenid).send({from:ethereum.selectedAddress})
+          if(res.status){
+            window.document.getElementById('id_res').innerHTML = '转账失败'
+          }else{
+            window.document.getElementById('id_res').innerHTML = '转账成功'
+          }
+        }
+    </script>
+</body>
+</html>
