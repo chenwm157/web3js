@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>js运行器</title>
+</head>
+<body>
+    
+    
+    <script type="text/javascript" >
+
+	
+        function yunx(){
+            var bianji = document.getElementById("myedit").contentWindow;
+            var tet1 = document.getElementById("content").value;
+            
+            
+            bianji.document.write(tet1);
+            bianji.document.close();
+        }
+        
+	
+        
+			
+		
+
+    </script>
+<center>
+
+<textarea name="content"  id="content" rows=30 style="width:800px"></textarea> 
+</br><input value="运行" type="button" onclick="yunx()" ></br>
+<iframe id="myedit" width="800" height="450" src="about:blank"  charset="utf-8"></iframe>
+</center>  
+</body>
+</html>
+<!--<script>
+<script src="https://cdn.bootcdn.net/ajax/libs/web3/1.7.4/web3.min.js"></script>
+<script>
+	if (typeof web3 !== 'undefined') {
+	web3 = new Web3(web3.currentProvider);
+	} else {
+		// set the provider you want from Web3.providers
+		rpcurl = "https://bsc-dataseed.binance.org/"
+		// "http://localhost:8545"
+		web3 = new Web3(new Web3.providers.HttpProvider(rpcurl));
+	}
+	_chainID = 56
+</script>
+</script>!-->

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>abi编写器</title>
+</head>
+<body>
+    
+    
+    <script type="text/javascript" >
+
+	
+        function yunx(){
+            var bianji = document.getElementById("myedit").contentWindow;
+            var tet1 = document.getElementById("content").value;
+            
+            var abi = document.getElementById("abi").value;
+                       
+            bianji.document.write("<script type='text/javascript' src='web3/web3.min.js'><\/script>");
+            bianji.document.write("<script> ");
+            bianji.document.write("\n ");
+            
+            
+            if(abi == ""){
+                bianji.document.write("abi = ''");
+                bianji.document.write("\n ");
+            }else{
+                bianji.document.write("abi = "+abi);
+                bianji.document.write("\n ");
+            }
+
+            a = getContrat.toString()
+            bianji.document.write(a);
+            bianji.document.write("\n ");
+
+            //a = methods.toString()
+
+            a = methods2()
+            bianji.document.write(a);
+
+            bianji.document.write("\n ");
+            //bianji.document.write("methods() ");
+            //bianji.document.write("\n ");
+            bianji.document.write(" <\/script> ");
+            bianji.document.close();
+        }
+        function getContrat(){
+            if (typeof web3 !== 'undefined') {
+            web3 = new Web3(web3.currentProvider);
+            } else {
+                // set the provider you want from Web3.providers
+                rpcurl = "https://bsc-dataseed4.ninicoin.io"
+                // "http://localhost:8545"
+                web3 = new Web3(new Web3.providers.HttpProvider(rpcurl));
+            }
+
+            _chainID = 56
+
+            if(abi == ""){
+                abi = [{"constant":false,"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"constant":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":true,"internalType":"address","name":"spender","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Approval","payable":false,"type":"event"},{"constant":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","payable":false,"type":"event"},{"constant":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Transfer","payable":false,"type":"event"},{"constant":false,"inputs":[{"indexed":false,"internalType":"address","name":"owner","type":"address"},{"indexed":false,"internalType":"address","name":"spender","type":"address"}],"name":"allowance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"indexed":false,"internalType":"address","name":"spender","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"approve","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"indexed":false,"internalType":"address","name":"account","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"decimals","outputs":[{"internalType":"uint8","name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"indexed":false,"internalType":"address","name":"spender","type":"address"},{"indexed":false,"internalType":"uint256","name":"subtractedValue","type":"uint256"}],"name":"decreaseAllowance","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"indexed":false,"internalType":"address","name":"spender","type":"address"},{"indexed":false,"internalType":"uint256","name":"addedValue","type":"uint256"}],"name":"increaseAllowance","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[],"name":"name","outputs":[{"internalType":"string","name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"renounceOwnership","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[],"name":"symbol","outputs":[{"internalType":"string","name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"totalSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"indexed":false,"internalType":"address","name":"recipient","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"transfer","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"indexed":false,"internalType":"address","name":"sender","type":"address"},{"indexed":false,"internalType":"address","name":"recipient","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"transferFrom","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"indexed":false,"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"indexed":false,"internalType":"address","name":"_to","type":"address"},{"indexed":false,"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"mint","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"indexed":false,"internalType":"address","name":"_addMinter","type":"address"}],"name":"addMinter","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"indexed":false,"internalType":"address","name":"_delMinter","type":"address"}],"name":"delMinter","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[],"name":"getMinterLength","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"indexed":false,"internalType":"address","name":"account","type":"address"}],"name":"isMinter","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"_index","type":"uint256"}],"name":"getMinter","outputs":[{"internalType":"address","name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"}]
+            }
+            var address = "0x000000000000000000000000000000000000dEaD"
+            contract = new web3.eth.Contract(abi,address)
+            return contract
+        }
+        function methods(){
+            var address = "0x000000000000000000000000000000000000dEaD"
+            contract = getContrat()
+            a = contract.methods.transfer(address,100).encodeABI()
+            console.log(a)
+        }
+        function methods2(){
+            var tet1 = document.getElementById("content").value;
+            var a = "var contract = getContrat() \n var a = contract.methods." + tet1 + ".encodeABI() \n document.write(a)"
+            return a
+
+            
+        }
+
+        
+
+    </script>
+<center>
+</br><a>abi</a><input  type="text" id="abi" ></br>
+
+<textarea name="content"  id="content" rows=10 style="width:800px"></textarea> 
+</br><input value="运行" type="button" onclick="yunx()" ></br>
+<iframe id="myedit" width="800" height="450" src="about:blank"  charset="utf-8"></iframe>
+</center>  
+</body>
+</html>

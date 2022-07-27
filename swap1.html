@@ -16,12 +16,25 @@
     web3 = new Web3(web3.currentProvider);
     } else {
         // set the provider you want from Web3.providers
-        rpcurl = "https://bsc-dataseed.binance.org/"
+        rpcurl = "https://bsc-dataseed3.ninicoin.io/"
         // "http://localhost:8545"
         web3 = new Web3(new Web3.providers.HttpProvider(rpcurl));
     }
 
 	_chainID = 56
+
+	set_chainID =async ()=>{
+		_chainID = await web3.eth.getChainId()
+		console.log('chainId:',_chainID)
+	}
+  
+	network = () =>{
+		rpcurl = window.document.getElementById('id_network').value       
+        web3 = new Web3(new Web3.providers.HttpProvider(rpcurl));
+		set_chainID()
+		
+	}
+
 	
 	pancake_rount = "0x10ED43C718714eb63d5aA57B78B54704E256024E"
 	wbnb = "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"
@@ -29,31 +42,28 @@
 	address = "";
 	contract = "";
 	deci = "";
-	function getbalance(currentAccount){
-		web3.eth.getBalance(currentAccount, (err,result) => {
-		if (err== null) {
-		//	console.log(result);
-		  bnb = web3.utils.fromWei(result,'ether')
-		  document.getElementById('bnb').text = bnb
-		}else  {
-		  console.log('~error:'+err);
-		}
-	  })}
+	
+	async function getbalance(currentAccount){
+		let result = await web3.eth.getBalance(currentAccount)
+		
+		bnb = web3.utils.fromWei(result,'ether')
+		document.getElementById('bnb').innerHTML = bnb
+
+	}
 	  
 	function fContract(addr){
-    var abi1= [{"constant":true,"inputs":[{"indexed":false,"name":"_addr","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"decimals","outputs":[{"internalType":"uint8","name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"}]
-	var _addr = addr;
+		var abi1= [{"constant":true,"inputs":[{"indexed":false,"name":"_addr","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"decimals","outputs":[{"internalType":"uint8","name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"}]
+		var _addr = addr;
 
-    var ibacontract =new web3.eth.Contract(abi1,_addr);
-    return ibacontract
-}	
-	function get_decimals(addr){
-	ibacontract = fContract(addr)
-	ibacontract.methods.decimals().call().then(res=>{
-	//console.log(res)
-	document.getElementById('deci').text = res
-	deci = res
-	})
+		var ibacontract =new web3.eth.Contract(abi1,_addr);
+    	return ibacontract
+	}	
+	async function get_decimals(addr){
+		ibacontract = fContract(addr)
+		res = await ibacontract.methods.decimals().call()
+		
+		document.getElementById('deci').text = res
+		deci = res
 	}
 	
 	function redeci(num,decis){
@@ -66,33 +76,27 @@
 		return re
 	}
 	
-	function getBalance_contract(addr){
-	var abi  = [{"constant":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"amountIn","type":"uint256"},{"indexed":false,"internalType":"address[]","name":"path","type":"address[]"}],"name":"getAmountsOut","outputs":[{"internalType":"uint256[]","name":"amounts","type":"uint256[]"}],"payable":false,"stateMutability":"view","type":"function"}]
-	var pancake =new web3.eth.Contract(abi,pancake_rount);
-	
-	ibacontract = fContract(addr)
-	ibacontract.methods.balanceOf(address).call().then(res=>{
-	console.log(res)
-	if(res > 0){re = redeci(res,deci)}else{re = "0"}
-	
-	document.getElementById('con').text = re
-	document.getElementById('numcon').value = re
-	
-	if(res > 0){
-	pancake.methods.getAmountsOut(res,[contract,wbnb]).call(null,function(err, res){
-                if(err){
-            console.log(err)
-            }else{
-				res1 = web3.utils.fromWei(res[1],'ether')
-                //console.log(web3.utils.fromWei(res[1],'ether'))
-				document.getElementById('con1').text = res1
-                }})}else{
-				document.getElementById('con1').text = "0"
-				}
+	async function getBalance_contract(addr){
+		var abi  = [{"constant":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"amountIn","type":"uint256"},{"indexed":false,"internalType":"address[]","name":"path","type":"address[]"}],"name":"getAmountsOut","outputs":[{"internalType":"uint256[]","name":"amounts","type":"uint256[]"}],"payable":false,"stateMutability":"view","type":"function"}]
+		var pancake =new web3.eth.Contract(abi,pancake_rount);
+		
+		ibacontract = fContract(addr)
+		res = await ibacontract.methods.balanceOf(address).call()
+		console.log(res)
+		if(res > 0){re = redeci(res,deci)}else{re = "0"}
+		
+		document.getElementById('con').text = re
+		document.getElementById('numcon').value = re
+		
+		if(res > 0){
+			res = await pancake.methods.getAmountsOut(res,[contract,wbnb]).call()
+			res1 = web3.utils.fromWei(res[1],'ether')
+			//console.log(web3.utils.fromWei(res[1],'ether'))
+			document.getElementById('con1').text = res1
+		}else{
+			document.getElementById('con1').text = "0"
+		}
 				
-	
-	
-	})
 	}
 	
 	
@@ -109,23 +113,20 @@
 		//}
 	}
 	
-	function changecontract(){
+	async function changecontract(){
 		contract = document.getElementById('contract').value
 		
-		web3.eth.call({
-		to: contract,
-		data: "0x06fdde03"
-		}).then(res => {
-			var anatokenname1 = "0x"+res.substring(res.length, 64)
-		//	console.log(anatokenname1 )
-			anatokenname = web3.utils.hexToUtf8(anatokenname1)
-		//	console.log(anatokenname)
-			document.getElementById('name').text = String(anatokenname).slice(33)
+		res = await web3.eth.call({
+			to: contract,
+			data: "0x06fdde03"
 		})
+		var anatokenname1 = "0x"+res.substring(res.length, 64)	
+		anatokenname = web3.utils.hexToUtf8(anatokenname1)	
+		document.getElementById('name').text = String(anatokenname).slice(33)
+		
 		get_decimals(contract)
 		getBalance_contract(contract)
 	}
-	
 	
 	
 	
@@ -137,39 +138,29 @@
 	
 
 	
-	function  senddata(account1,key1,toaddress,value,data){
-//	get_time()
-    web3.eth.getTransactionCount(account1, (err, txCount) => {
-      // 创建交易对象
-	  
-      const txObject = {
-      nonce:    web3.utils.toHex(txCount),
-	//nonce: nonce1,
-      to:       toaddress,
-      value:    web3.utils.toHex(web3.utils.toWei(value, 'ether')),
-      gasLimit: web3.utils.toHex(1200000),
-      gasPrice: web3.utils.toHex(web3.utils.toWei('5.2', 'gwei')),
-      data:data,
-      chainId:_chainID
-    }
-    web3.eth.accounts.signTransaction(
-      txObject, key1).then(function(data){
-   //   web3.eth.sendSignedTransaction(data.rawTransaction).on('receipt', (res)=>{
-//		console.log(res)
-//		alert(res.status)
-//	  });
-	 web3.eth.sendSignedTransaction(data.rawTransaction,function(err,res){
-		if(err){
-		alert(err)
-		}
-	 }).on('receipt', (res)=>{
-		console.log(res)
-		alert(res.status)
-	  });
+async function  senddata(account1,key1,toaddress,value,data){
+
+	gp = document.getElementById('gp1').value
+    gl = document.getElementById('gl1').value
+
+	let txCount = await web3.eth.getTransactionCount(account1)
+	// 创建交易对象
 	
-  })
-  })
-  }
+	const txObject = {
+	nonce:    web3.utils.toHex(txCount),
+	to:       toaddress,
+	value:    web3.utils.toHex(web3.utils.toWei(value, 'ether')),
+	gasLimit: web3.utils.toHex(gl),
+	gasPrice: web3.utils.toHex(web3.utils.toWei(gp, 'gwei')),
+	data:data,
+	chainId:_chainID
+	}
+	let data1 = await web3.eth.accounts.signTransaction(txObject, key1)
+
+	let res = await web3.eth.sendSignedTransaction(data1.rawTransaction)
+		alert(res.status)
+	console.log(res)
+}
   
   function to064(fstr){re = "";for(i=0;i<64 - fstr.length ;i++){re+="0"}return re+fstr }
   
@@ -227,6 +218,7 @@
 	
 	d1 = "0x791ac947" //swapExactTokensForETHSupportingFeeOnTransferTokens(uint256 amountIn, uint256 amountOutMin, address[] path, address to, uint256 deadline)
 	
+	
 	_amountin = document.getElementById('numcon').value
 	in1 = numTostr(_amountin,deci)
 	amountin = to064(web3.utils.toHex(in1).split('x')[1])
@@ -276,14 +268,17 @@
 	//console.log(web3.eth.getBlock())
 	</script>
 	</br>
+	<p><a>网络</a><input type="text" value="https://bsc-dataseed3.ninicoin.io/" id="id_network"><input type="button" onClick="network()" value="确定" name="" id=""></p>
 	<a>私钥<a><input type="text" value="" id="key"><input type="button" value="确定" onclick="changekey()"></br>
 	<a>地址:<a><a id="address"><a></br></br>
 	<a>BNB余额: <a><a id="bnb"><a></br></br>
 	<a>合约地址:<a><input type="text" value="" id="contract"><input type="button" value="确定" onclick="changecontract()"></br>
-	<a>代笔名称:<a><a id="name"><a></br></br>
-	<a>代笔余额: <a><a id="con"><a></br></br>
-	<a>代笔BNB价值: <a><a id="con1"><a></br></br>
-	<a>代币精度: <a><a id="deci"><a></br>
+	<p><a>代笔名称:<a><a id="name"><a></p>
+	<p><a>代笔余额: <a><a id="con"><a></p>
+	<p><a>代笔BNB价值: <a><a id="con1"><a></p>
+	<p><a>代币精度: <a><a id="deci"><a></p>
+	<a>gas price<a><input type="text" value="5.1" id="gp1"></br>
+	<a>gas limit<a><input type="text" value="500000" id="gl1"></br>
 	<input type="button" value="刷新余额" onclick="shuaxin()"></br>
 	<a>买入代币 BNB数量<a><input type="text" value="" id="numbnb"></br></br>  <a>    <a><input type="button" value="买入" onclick="buy()"> 
 	<a>       <a><input type="button" value="授权" onclick="approve()"> </br> </br> 
