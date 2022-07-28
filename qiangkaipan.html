@@ -12,17 +12,9 @@
     <!--	<script type='text/javascript' src='web3.min.js'></script> -->
 	<script>
 		_chainID = 56
-		if (typeof web3 !== 'undefined') {
-		web3 = new Web3(web3.currentProvider);
-		} else {
-			// set the provider you want from Web3.providers
-			// rpcurl = "https://bsc-dataseed3.ninicoin.io/"
-			rpcurl = window.document.getElementById('id_network').value
-			// "http://localhost:8545"
-			web3 = new Web3(new Web3.providers.HttpProvider(rpcurl));
-			
-			set_chainID()
-		}
+		
+		rpcurl = window.document.getElementById('id_network').value	
+		web3 = new Web3(new Web3.providers.HttpProvider(rpcurl));
 
 		network = () =>{
 			rpcurl = window.document.getElementById('id_network').value       
@@ -31,13 +23,11 @@
 			
 		}
 
-		
-		// console.log(web3)
-
 		set_chainID =async ()=>{
 			_chainID = await web3.eth.getChainId()
 			console.log('chainId:',_chainID)
 		}
+		set_chainID()
 	</script>
     <script type="text/javascript" >
     

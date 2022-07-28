@@ -7,50 +7,25 @@
     <title>send</title>
 </head>
 <body>
-
-<p><a>网络</a><input type="text" value="https://bsc-dataseed3.ninicoin.io/" id="id_network"><input type="button" onClick="network()" value="确定" name="" id=""></p>
-<a>私钥<a><input type="text" value="" id="key"><input type="button" value="确定" onclick="changekey()"></br>
-<a>地址:<a><a id="address"><a></br>
-<a>主币余额: <a><a id="bnb"><a></br></br>
-<a>发送地址<a><input type="text" value="" id="toaddress"></br> 
-<a>主币数量<a><input type="text" value="" id="numbnb"></br>
-<a>gas price<a><input type="text" value="5.2" id="gp1"></br>
-<a>gas limit<a><input type="text" value="500000" id="gl1"></br>
-<a>发送数据</a><input type="text" value="" id="data1"></br>
-<a>提前n秒</a><input type="text" value="5" id="sn"></br>
-<a>发送时间<a>
-    <input type="text" value="0" id="hms"><a>（格式示意12点半表示 123000,0表示立即）</a>
- </br></br>  <a>    <a><input type="button" value="发送" onclick="buy()"> 
- 
-    <script src="https://cdn.bootcdn.net/ajax/libs/web3/1.7.4/web3.min.js"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/web3/1.7.4/web3.min.js"></script>
     <script type="text/javascript" >
     
-    _chainID = 56
 
-    
+    rpcurl = "https://bsc-dataseed4.ninicoin.io/"    
+    web3 = new Web3(new Web3.providers.HttpProvider(rpcurl));
 
-    if (typeof web3 !== 'undefined') {
-    web3 = new Web3(web3.currentProvider);
-    } else {
-        // set the provider you want from Web3.providers
-        rpcurl = "https://bsc-dataseed3.ninicoin.io/"
-		    //rpcurl = window.document.getElementById('id_network').value
-        // "http://localhost:8545"
-        web3 = new Web3(new Web3.providers.HttpProvider(rpcurl));
-		
-		   //set_chainID()
-    }
 
-	
-	
-    set_chainID =async ()=>{
+	_chainID = 56
+
+	set_chainID =async ()=>{
 		_chainID = await web3.eth.getChainId()
 		console.log('chainId:',_chainID)
+    alert('修改成功，链ID：'+_chainID)
 	}
   
 	network = () =>{
 		rpcurl = window.document.getElementById('id_network').value       
-        web3 = new Web3(new Web3.providers.HttpProvider(rpcurl));
+    web3 = new Web3(new Web3.providers.HttpProvider(rpcurl));
 		set_chainID()
 		
 	}
@@ -62,42 +37,45 @@
     gl = ''
     gp = ''
     data = ''
+    nonces = {}
 
-  async function  senddata(account1,key1,toaddress,value,data){
+    async function  senddata(account1,key1,toaddress,value,data,gasp,gasl){
+      let txCount = await web3.eth.getTransactionCount(account1)
+        // 创建交易对象
+      
+      while(nonces[txCount]){txCount+=1}
+      nonces[txCount] = true
 
-    gasp = document.getElementById('gp1').value
-    gasl = document.getElementById('gl1').value
+      console.log(txCount,nonces)
+        const txObject = {
+        nonce:    web3.utils.toHex(txCount),
+        to:       toaddress,
+        value:    web3.utils.toHex(web3.utils.toWei(value, 'ether')),
+        gasLimit: web3.utils.toHex(gasl),
+        gasPrice: web3.utils.toHex(web3.utils.toWei(gasp, 'gwei')),
+        data:data,
+        chainId:_chainID
+      }
+      console.log(account1,key1,toaddress,value,data,gasp,gasl)
+      let data1 = await web3.eth.accounts.signTransaction(txObject, key1)
 
-    let txCount = await web3.eth.getTransactionCount(account1)
-      // 创建交易对象
-	  
-      const txObject = {
-      nonce:    web3.utils.toHex(txCount),
-      to:       toaddress,
-      value:    web3.utils.toHex(web3.utils.toWei(value, 'ether')),
-      gasLimit: web3.utils.toHex(gasl),
-      gasPrice: web3.utils.toHex(web3.utils.toWei(gasp, 'gwei')),
-      data:data,
-      chainId:_chainID
+      let res = await web3.eth.sendSignedTransaction(data1.rawTransaction)
+      alert(res.status)
+      console.log(res)
+      nonces  = {}
     }
-    let data1 = await web3.eth.accounts.signTransaction(txObject, key1)
-
-	  let res = await web3.eth.sendSignedTransaction(data1.rawTransaction)
-		alert(res.status)
-    console.log(res)
-  }
-
-  async function getbalance(currentAccount){
+    async function getbalance(currentAccount){
 		let result = await web3.eth.getBalance(currentAccount)
-		
+		console.log(result)
 		bnb = web3.utils.fromWei(result,'ether')
 		document.getElementById('bnb').text = bnb
 
 	}
-
-
   function changekey(){
-    
+    // nw = document.getElementById('network').value
+    // web3 = new Web3(new Web3.providers.HttpProvider(nw));
+    // cid1 = document.getElementById('cid').value
+    // _chainID = cid1
 		key = document.getElementById('key').value
 		address = web3.eth.accounts.privateKeyToAccount(key).address
 		document.getElementById('address').text = address
@@ -105,9 +83,20 @@
 		getbalance(address)
 	}
 
-    function buy(){
+  buy = ()=>{
+    n = document.getElementById('id_nc').value
+    for(i=0;i<parseInt(n);i++){
+      _buy(i)
+    }
+  }
+
+    function _buy(nc){
+
+        document.getElementById
+
 	      value = document.getElementById('numbnb').value
-        toadr = document.getElementById('toaddress').value        
+        toadr = document.getElementById('toaddress').value
+        
         data = document.getElementById('data1').value
         var hms1 = document.getElementById('hms').value
         var sn1 = document.getElementById('sn').value
@@ -121,17 +110,26 @@
         var tdate = getDate()
         
         var t0 = tdate[0] * 60 *60 + tdate[1] * 60 + tdate[2]
-        var t1 = h1 * 60 * 60 + m1 * 60 + s1 - sn1
-        console.log([t0,t1,tdate])
+        var t1 = h1 * 60 * 60 + m1 * 60 + s1 - sn1 + nc
+        console.log([t0,t1,tdate,nc])
         
         var ctime =( t1 - t0 ) * 1000
+
         console.log(ctime)
 
+        if( ctime>0){
+          _timeList = document.getElementById('timeList')
+          _timeList.innerHTML = _timeList.innerHTML + "定制时间：" + new Date() + "</br>" +"执行时间：" + hms1 +  "</br>";
+        }
+      
+        (function(hms){
         setTimeout(
             function(){
+              _timeList = document.getElementById('timeList')
+              _timeList.innerHTML = _timeList.innerHTML  +"已执行：" + hms1 +  "</br>";
                do1()
             },ctime
-        )
+        )})(hms1);
         
     }
 
@@ -148,12 +146,58 @@
 
    
     function do1(){
-        senddata(address,key,toadr,value,data)
+        gp = document.getElementById('gp1').value
+        gl = document.getElementById('gl1').value
+        senddata(address,key,toadr,value,data,gp,gl)
     }
     
 
 	</script> 
 
+<div id="box1">
+  <div id="box2">
+  <h3>抢预售</h3>
+  <p><a>网络</a><input type="text" value="https://bsc-dataseed4.ninicoin.io/" id="id_network"><input type="button" onClick="network()" value="确定" name="" id=""></p>
+  
+  <a>私钥<a><input type="text" value="" id="key"><input type="button" value="确定" onclick="changekey()"></br>
+  <a>地址:<a><a id="address"><a></br>
+  <a>主币余额: <a><a id="bnb"><a></br></br>
+  <a>发送地址<a><input type="text" value="" id="toaddress"></br> 
+  <a>主币数量<a><input type="text" value="" id="numbnb"></br>
+  <a>gas price<a><input type="text" value="5.2" id="gp1"></br>
+  <a>gas limit<a><input type="text" value="500000" id="gl1"></br>
+  <a>发送数据</a><input type="text" value="" id="data1"></br>
+  <a>提前n秒</a><input type="text" value="6" id="sn"></br>
+  <a>发送n次</a><input type="text" value="1" id="id_nc"></br>
+  <a>发送时间<a>
+  <input type="text" value="0" id="hms"></br><a>（格式示意12点半表示 123000,0表示立即）</a>
+   
+  </br></br>  <a>    <a><input type="button" value="发送" onclick="buy()"> 
+
+    <div style="width: 300px">
+      <p>定时列表：</p>
+      <div
+        style="
+          width: 300px;
+          height: 200px;
+          border: 1px solid #ddd;
+          overflow: auto;
+          
+        "
+        id="timeList"
+      ></div>
+  </div>
+ </div>
+ <style>
+  div {        
+    opacity: 1;
+  }
+  #box2{
+    width: 320px;
+    margin:0 auto;
+  }
  
+
+</style>
 </body>
 </html>

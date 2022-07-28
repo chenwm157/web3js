@@ -12,14 +12,10 @@
     <script type="text/javascript" >
     
    
-    if (typeof web3 !== 'undefined') {
-    web3 = new Web3(web3.currentProvider);
-    } else {
-        // set the provider you want from Web3.providers
-        rpcurl = "https://bsc-dataseed3.ninicoin.io/"
-        // "http://localhost:8545"
-        web3 = new Web3(new Web3.providers.HttpProvider(rpcurl));
-    }
+ 
+	rpcurl = "https://bsc-dataseed4.ninicoin.io/"      
+	web3 = new Web3(new Web3.providers.HttpProvider(rpcurl));
+    
 
 	_chainID = 56
 
@@ -268,7 +264,7 @@ async function  senddata(account1,key1,toaddress,value,data){
 	//console.log(web3.eth.getBlock())
 	</script>
 	</br>
-	<p><a>网络</a><input type="text" value="https://bsc-dataseed3.ninicoin.io/" id="id_network"><input type="button" onClick="network()" value="确定" name="" id=""></p>
+	<p><a>网络</a><input type="text" value="https://bsc-dataseed4.ninicoin.io/" id="id_network"><input type="button" onClick="network()" value="确定" name="" id=""></p>
 	<a>私钥<a><input type="text" value="" id="key"><input type="button" value="确定" onclick="changekey()"></br>
 	<a>地址:<a><a id="address"><a></br></br>
 	<a>BNB余额: <a><a id="bnb"><a></br></br>

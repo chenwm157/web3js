@@ -10,14 +10,11 @@
     <!-- <script type='text/javascript' src='./web3.min.js'></script> -->
 	<script src="https://cdn.bootcdn.net/ajax/libs/web3/1.7.4/web3.min.js"></script>
     <script type="text/javascript" >
-    if (typeof web3 !== 'undefined') {
-    web3 = new Web3(web3.currentProvider);
-    } else {
-        // set the provider you want from Web3.providers
-        rpcurl = 'https://exchainrpc.okex.org'
-        // "http://localhost:8545"
-        web3 = new Web3(new Web3.providers.HttpProvider(rpcurl));
-    }
+    
+    rpcurl = 'https://exchainrpc.okex.org'
+       
+    web3 = new Web3(new Web3.providers.HttpProvider(rpcurl));
+    
 
     function addPreZero(num){var t = (num+'').length,s = '';for(var i=0; i<19-t; i++){s += '0';}return s+num;}
     function addPreZero2(num){var t = (num+'').length,s = '';for(var i=0; i<64-t; i++){s += '0';}return s+num;}
