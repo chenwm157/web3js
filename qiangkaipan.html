@@ -13,7 +13,7 @@
 	<script>
 		_chainID = 56
 		
-		rpcurl = window.document.getElementById('id_network').value	
+		rpcurl = rpcurl = "https://bsc-dataseed4.ninicoin.io"   
 		web3 = new Web3(new Web3.providers.HttpProvider(rpcurl));
 
 		network = () =>{
@@ -374,7 +374,7 @@
 	</script>
 	</br>
 	<!-- <input type="button" value="test" onClick="selectvalue()" name="" id=""> -->
-	<p>网络：<input type="text" value="https://bsc-dataseed3.ninicoin.io/" name="" id="id_network"><input type="button" onClick="network()" value="确定" name="" id=""></p>
+	<p>网络：<input type="text" value="https://bsc-dataseed4.ninicoin.io/" name="" id="id_network"><input type="button" onClick="network()" value="确定" name="" id=""></p>
 	<a>私钥</a><input type="text" value="" id="key"><input type="button" value="确定" onclick="changekey()"></br>
 	<a>地址:</a><a id="address"></a></br></br>
 	<a>BNB余额: </a><a id="bnb"></a></br></br>

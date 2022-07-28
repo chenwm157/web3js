@@ -7,16 +7,21 @@
     <title>getpinksale</title>
 </head>
 <body>
+	<p>网络：<input type="text" value="https://bsc-dataseed4.ninicoin.io/" name="" id="id_network"><input type="button" onClick="network()" value="确定" name="" id=""></p>
+	<a>地址<a><input type="text" value="" id="address"><input type="button" value="确定" onclick="changeadr()"></br>
+	<a>主币余额: <a><a id="bnb"><a></br></br>
+	<a>合约<a><input type="text" value="" id="erc20"><input type="button" value="确定" onclick="geterc20()"></br>
+	<a>代币余额: <a><a id="erc"><a></br></br>
+		
     <script src="https://cdn.bootcdn.net/ajax/libs/web3/1.7.4/web3.min.js"></script>
     <script type="text/javascript" >
     
 	_chainID = 56
    
-	rpcurl = window.document.getElementById('id_network').value
-        
+	rpcurl = window.document.getElementById('id_network').value        
     web3 = new Web3(new Web3.providers.HttpProvider(rpcurl));
 		
-	set_chainID()
+	
    
 	network = () =>{
 		rpcurl = window.document.getElementById('id_network').value       
@@ -32,6 +37,7 @@
 		_chainID = await web3.eth.getChainId()
 		console.log('chainId:',_chainID)
 	}
+	set_chainID()
 
     address=''
 
@@ -309,11 +315,7 @@ const jia0 = (decimal,len)=>{let re;let i;re = "";for(i=0;i<decimal - len ;i++){
     
 
 	</script> 
-<p>网络：<input type="text" value="https://bsc-dataseed3.ninicoin.io/" name="" id="id_network"><input type="button" onClick="network()" value="确定" name="" id=""></p>
-<a>地址<a><input type="text" value="" id="address"><input type="button" value="确定" onclick="changeadr()"></br>
-<a>主币余额: <a><a id="bnb"><a></br></br>
-<a>合约<a><input type="text" value="" id="erc20"><input type="button" value="确定" onclick="geterc20()"></br>
-<a>代币余额: <a><a id="erc"><a></br></br>
+
 
 </body>
 </html>
