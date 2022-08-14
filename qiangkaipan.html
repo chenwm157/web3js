@@ -181,42 +181,43 @@
 	if(s === '3'){buy_busd()}
   }
   
+  function getcswap(){
+	var	c_abi = [{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"uint256","name":"amountIn","type":"uint256"},{"internalType":"address[]","name":"path","type":"address[]"}],"name":"getOut","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"gp","outputs":[{"internalType":"contract getp","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"router","outputs":[{"internalType":"contract IDEXRouter","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address[]","name":"path","type":"address[]"},{"internalType":"uint256","name":"limit1","type":"uint256"},{"internalType":"uint256","name":"limit2","type":"uint256"},{"internalType":"uint256","name":"outPercent","type":"uint256"}],"name":"swapETHForTokensWithLimit","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"wbnb","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"}]
+	var c_adr = '0xb91e19A28626b6946300A5d1aABC7A6b25092817'
+	cswap = new web3.eth.Contract(c_abi,c_adr)
+	return cswap
+  }
+
   function buy_bnb(){
 
-	d1 = "0x6dc5981e" //ETHBuyLimit(address token,uint256 outPercent,uint256 limittoken,uint256 limitbnb) 
-	token = to064(contract.split('x')[1])
-	outPercent = to064(String(web3.utils.toHex(75)).split('x')[1]) //25税以内可以成交  
-	limittoken = to064(String(web3.utils.toHex(tklm)).split('x')[1])
-	limitbnb = to064(String(web3.utils.toHex(bnblm)).split('x')[1])
-	data = d1 + token + outPercent + limittoken + limitbnb;
-	console.log(data)
-
-	rount = '0xf182a173aB3cCe37343ffFE5f3ffb4e954e62e8D'
-	
+	cswap = getcswap()
+	path = [wbnb,contract]
+	outPercent = 75 //25税以内可以成交  
+	data = cswap.methods.swapETHForTokensWithLimit(path,bnblm,tklm,outPercent).encodeABI()
+	console.log(data,value)
+	rount = '0xb91e19A28626b6946300A5d1aABC7A6b25092817'	
 	senddata(address,key,rount,value,data)
   }
 
   function buy_usdt(){
 
-	rount = '0xF1306F783A56F81468583DbBddeF41e9CF521f7e'
-	var abi = [{"inputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"uint256","name":"outPercent","type":"uint256"},{"internalType":"uint256","name":"limittoken","type":"uint256"},{"internalType":"uint256","name":"limitbnb","type":"uint256"},{"internalType":"address","name":"to","type":"address"}],"name":"ETHBuyLimit","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"uint256","name":"outPercent","type":"uint256"},{"internalType":"uint256","name":"limittoken","type":"uint256"},{"internalType":"uint256","name":"limitu","type":"uint256"},{"internalType":"address","name":"to","type":"address"}],"name":"ETHBuyLimitBusd","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"uint256","name":"outPercent","type":"uint256"},{"internalType":"uint256","name":"limittoken","type":"uint256"},{"internalType":"address","name":"token1","type":"address"},{"internalType":"uint256","name":"limitT","type":"uint256"},{"internalType":"address","name":"to","type":"address"}],"name":"ETHBuyLimitToken","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"uint256","name":"outPercent","type":"uint256"},{"internalType":"uint256","name":"limittoken","type":"uint256"},{"internalType":"uint256","name":"limitu","type":"uint256"},{"internalType":"address","name":"to","type":"address"}],"name":"ETHBuyLimitUsdt","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"address","name":"to","type":"address"}],"name":"ETHToLp","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"uint256","name":"outPercent","type":"uint256"},{"internalType":"address","name":"to","type":"address"},{"internalType":"address[]","name":"path","type":"address[]"}],"name":"ETHToToken","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"uint256","name":"amountIn","type":"uint256"},{"internalType":"address","name":"to","type":"address"}],"name":"TokenToLp","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"dar1","type":"address"},{"internalType":"address","name":"adr2","type":"address"}],"name":"getPair","outputs":[{"internalType":"address","name":"adr","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"amountIn","type":"uint256"},{"internalType":"uint256","name":"amountOutMin","type":"uint256"},{"internalType":"address[]","name":"path","type":"address[]"},{"internalType":"address","name":"to","type":"address"}],"name":"swapExactTokensForTokensSupportingFeeOnTransferTokens","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"tokenIn","type":"address"},{"internalType":"address","name":"tokenOut","type":"address"},{"internalType":"uint256","name":"amountIn","type":"uint256"},{"internalType":"uint256","name":"outPercent","type":"uint256"},{"internalType":"uint256","name":"limittoken","type":"uint256"},{"internalType":"uint256","name":"limittokenIn","type":"uint256"},{"internalType":"address","name":"to","type":"address"},{"internalType":"address[]","name":"path","type":"address[]"}],"name":"tokenBuyLimit","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"uint256","name":"amountIn","type":"uint256"},{"internalType":"uint256","name":"outPercent","type":"uint256"},{"internalType":"address","name":"to","type":"address"},{"internalType":"address[]","name":"path","type":"address[]"}],"name":"tokenToETH","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"tokenIn","type":"address"},{"internalType":"address","name":"tokenOut","type":"address"},{"internalType":"uint256","name":"amountIn","type":"uint256"},{"internalType":"uint256","name":"outPercent","type":"uint256"},{"internalType":"address","name":"to","type":"address"},{"internalType":"address[]","name":"path","type":"address[]"}],"name":"tokenTotoken","outputs":[],"stateMutability":"nonpayable","type":"function"},{"stateMutability":"payable","type":"receive"}]
-	
-	var contr1 = new web3.eth.Contract(abi,rount);
-	var address = web3.eth.accounts.privateKeyToAccount(key).address
-	data = contr1.methods.ETHBuyLimitUsdt(contract,75,tklm,bnblm,address).encodeABI()
-	console.log(data)
+	cswap = getcswap()
+	path = [wbnb,usdt,contract]
+	outPercent = 75 //25税以内可以成交  
+	data = cswap.methods.swapETHForTokensWithLimit(path,bnblm,tklm,outPercent).encodeABI()
+	console.log(data,value)
+	rount = '0xb91e19A28626b6946300A5d1aABC7A6b25092817'	
 	senddata(address,key,rount,value,data)
   }
   
   function buy_busd(){
 
-	rount = '0xF1306F783A56F81468583DbBddeF41e9CF521f7e'
-	var abi = [{"inputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"uint256","name":"outPercent","type":"uint256"},{"internalType":"uint256","name":"limittoken","type":"uint256"},{"internalType":"uint256","name":"limitbnb","type":"uint256"},{"internalType":"address","name":"to","type":"address"}],"name":"ETHBuyLimit","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"uint256","name":"outPercent","type":"uint256"},{"internalType":"uint256","name":"limittoken","type":"uint256"},{"internalType":"uint256","name":"limitu","type":"uint256"},{"internalType":"address","name":"to","type":"address"}],"name":"ETHBuyLimitBusd","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"uint256","name":"outPercent","type":"uint256"},{"internalType":"uint256","name":"limittoken","type":"uint256"},{"internalType":"address","name":"token1","type":"address"},{"internalType":"uint256","name":"limitT","type":"uint256"},{"internalType":"address","name":"to","type":"address"}],"name":"ETHBuyLimitToken","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"uint256","name":"outPercent","type":"uint256"},{"internalType":"uint256","name":"limittoken","type":"uint256"},{"internalType":"uint256","name":"limitu","type":"uint256"},{"internalType":"address","name":"to","type":"address"}],"name":"ETHBuyLimitUsdt","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"address","name":"to","type":"address"}],"name":"ETHToLp","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"uint256","name":"outPercent","type":"uint256"},{"internalType":"address","name":"to","type":"address"},{"internalType":"address[]","name":"path","type":"address[]"}],"name":"ETHToToken","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"uint256","name":"amountIn","type":"uint256"},{"internalType":"address","name":"to","type":"address"}],"name":"TokenToLp","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"dar1","type":"address"},{"internalType":"address","name":"adr2","type":"address"}],"name":"getPair","outputs":[{"internalType":"address","name":"adr","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"amountIn","type":"uint256"},{"internalType":"uint256","name":"amountOutMin","type":"uint256"},{"internalType":"address[]","name":"path","type":"address[]"},{"internalType":"address","name":"to","type":"address"}],"name":"swapExactTokensForTokensSupportingFeeOnTransferTokens","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"tokenIn","type":"address"},{"internalType":"address","name":"tokenOut","type":"address"},{"internalType":"uint256","name":"amountIn","type":"uint256"},{"internalType":"uint256","name":"outPercent","type":"uint256"},{"internalType":"uint256","name":"limittoken","type":"uint256"},{"internalType":"uint256","name":"limittokenIn","type":"uint256"},{"internalType":"address","name":"to","type":"address"},{"internalType":"address[]","name":"path","type":"address[]"}],"name":"tokenBuyLimit","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"uint256","name":"amountIn","type":"uint256"},{"internalType":"uint256","name":"outPercent","type":"uint256"},{"internalType":"address","name":"to","type":"address"},{"internalType":"address[]","name":"path","type":"address[]"}],"name":"tokenToETH","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"tokenIn","type":"address"},{"internalType":"address","name":"tokenOut","type":"address"},{"internalType":"uint256","name":"amountIn","type":"uint256"},{"internalType":"uint256","name":"outPercent","type":"uint256"},{"internalType":"address","name":"to","type":"address"},{"internalType":"address[]","name":"path","type":"address[]"}],"name":"tokenTotoken","outputs":[],"stateMutability":"nonpayable","type":"function"},{"stateMutability":"payable","type":"receive"}]
-	
-	var contr1 = new web3.eth.Contract(abi,rount);
-	var address = web3.eth.accounts.privateKeyToAccount(key).address
-	data = contr1.methods.ETHBuyLimitBusd(contract,75,tklm,bnblm,address).encodeABI()
-	console.log(data)
+	cswap = getcswap()
+	path = [wbnb,busd,contract]
+	outPercent = 75 //25税以内可以成交  
+	data = cswap.methods.swapETHForTokensWithLimit(path,bnblm,tklm,outPercent).encodeABI()
+	console.log(data,value)
+	rount = '0xb91e19A28626b6946300A5d1aABC7A6b25092817'	
 	senddata(address,key,rount,value,data)
   }
 
