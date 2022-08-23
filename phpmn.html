@@ -959,6 +959,32 @@
                 alert('false')
             }
         }
+		getlv =async ()=>{
+			document.getElementById('res').innerHTML = ''
+            let lv = document.getElementById('id_lv').value
+            // let need = document.getElementById('id_need').value
+            
+            let _contract = getContract()
+            let res = await _contract.methods.levelNeed(lv).call();
+            document.getElementById('res').innerHTML = res
+        }
+        getblv =async ()=>{
+			document.getElementById('res').innerHTML = ''
+            let lv = document.getElementById('id_blv').value
+            let need = document.getElementById('id_bneed').value
+            
+            let _contract = getContract()
+            let res = await _contract.methods.levelBossNeed(lv).call();
+            document.getElementById('res').innerHTML = res
+        }
+        getbn = async ()=>{
+			document.getElementById('res').innerHTML = ''
+            let need = document.getElementById('id_BossNedd').value
+            
+            let _contract = getContract()
+            let res = await _contract.methods.bossNeed().call();
+            document.getElementById('res').innerHTML = res
+        }
         isbs = async ()=>{
             document.getElementById('res').innerHTML = ''
             let adr = document.getElementById('id_adr').value
@@ -991,17 +1017,20 @@
 <br />
 <span>need: </span><input id = 'id_need' />
 <br />
-<input type="button" value="setLvNeed" onClick="setlv()"/>
+<input type="button" value="setLvNeed" onClick="setlv()"/><br />
+<input type="button" value="getLvNeed" onClick="getlv()"/>
 <br /><br />
 <span>BossLv: </span><input id = 'id_blv' />
 <br />
 <span>need: </span><input id = 'id_bneed' />
 <br />
-<input type="button" value="setBossLvNeed" onClick="setblv()"/>
+<input type="button" value="setBossLvNeed" onClick="setblv()"/><br />
+<input type="button" value="getBossLvNeed" onClick="getblv()"/>
 <br /><br />
 <span>need: </span><input id = 'id_BossNedd' />
 <br />
-<input type="button" value="setBossNeed" onClick="setbn()"/>
+<input type="button" value="setBossNeed" onClick="setbn()"/><br />
+<input type="button" value="getBossNeed" onClick="getbn()"/>
 <br /><br />
 <input type="button" value="isBoos?" onClick="isbs()" />
 <input type="button" value="inviteAmount?" onClick="ivtam()" />
