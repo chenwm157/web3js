@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>phpmn</title>
+</head>
+<body>
+    <script src="https://cdn.bootcdn.net/ajax/libs/web3/1.7.4/web3.min.js"></script>
+    <script>
+        abi = [
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "newAmount",
+				"type": "uint256"
+			}
+		],
+		"name": "_buy",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "_initMain",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "sellAmount",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address[]",
+				"name": "path",
+				"type": "address[]"
+			}
+		],
+		"name": "_sell",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "_setOwnerInit",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "changeInviteAmount",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			}
+		],
+		"name": "getETH",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "token",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			}
+		],
+		"name": "getToken",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "previousOwner",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "OwnershipTransferred",
+		"type": "event"
+	},
+	{
+		"inputs": [],
+		"name": "renounceOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256[]",
+				"name": "bonus",
+				"type": "uint256[]"
+			}
+		],
+		"name": "setBonus1",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256[]",
+				"name": "bonus",
+				"type": "uint256[]"
+			}
+		],
+		"name": "setBonus2",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256[]",
+				"name": "bonus",
+				"type": "uint256[]"
+			}
+		],
+		"name": "setBonus3",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "adr",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "price",
+				"type": "uint256"
+			}
+		],
+		"name": "setBonusAdr",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "state",
+				"type": "bool"
+			},
+			{
+				"internalType": "bool",
+				"name": "haveBoss",
+				"type": "bool"
+			},
+			{
+				"internalType": "uint256",
+				"name": "bossIndex",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "need",
+				"type": "uint256"
+			}
+		],
+		"name": "setBoosNeed",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			},
+			{
+				"internalType": "bool",
+				"name": "bl",
+				"type": "bool"
+			}
+		],
+		"name": "setBoss",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256[]",
+				"name": "fp",
+				"type": "uint256[]"
+			}
+		],
+		"name": "setFeePoint",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "lv",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "need",
+				"type": "uint256"
+			}
+		],
+		"name": "setLvBossNeed",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "lv",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "need",
+				"type": "uint256"
+			}
+		],
+		"name": "setLvNeed",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "lv",
+				"type": "uint256"
+			}
+		],
+		"name": "setMaxBossLevel",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "lv",
+				"type": "uint256"
+			}
+		],
+		"name": "setMaxLevel",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "adr",
+				"type": "address"
+			}
+		],
+		"name": "setSwapAdr",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "transferOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"stateMutability": "payable",
+		"type": "receive"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "bonus1",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "bonus2",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "bonus3",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "bonusAdr",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "bossNeed",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "price",
+				"type": "uint256"
+			}
+		],
+		"name": "checkBoss",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "dutyFreeNum",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "feePoint",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			}
+		],
+		"name": "getBossLevel",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "adr",
+				"type": "address"
+			}
+		],
+		"name": "getInvite",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			}
+		],
+		"name": "getLevel",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "amountIn",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address[]",
+				"name": "path",
+				"type": "address[]"
+			}
+		],
+		"name": "getOut",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getphppath",
+		"outputs": [
+			{
+				"internalType": "address[]",
+				"name": "",
+				"type": "address[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "inviteAmount",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "invitePhp",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "isBoss",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "levelBossNeed",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "levelNeed",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "maxBossLevel",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "maxLevel",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "owner",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "phpPrice",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "router",
+		"outputs": [
+			{
+				"internalType": "contract IDEXRouter",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "swapAdr",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "blv",
+				"type": "uint256"
+			}
+		],
+		"name": "tomarket",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "pure",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "userBuy",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "userBuyPhp",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+]
+    </script>
+    <script>
+        matemask = {
+        m_account: '',
+		m_xcs: true,
+        connet: () => {
+            matemask.m_xcs = false
+            // var mate = window.ethereum;
+            if(typeof window.ethereum === 'undefined'){
+                alert('未安装钱包')
+            }
+            try{
+                window.ethereum.enable()
+            }catch(err){
+                alert('未通过')
+            }
+            if(!window.ethereum.isConnected()){
+                document.getElementById('_connet').value = "链接"
+                matemask.m_xcs = true
+            }else{
+                window.web3 = new Web3(window.ethereum);
+                // console.log(ethereum.selectedAddress)
+                matemask.m_account = ethereum.selectedAddress;
+                matemask.m_xcs = true
+                document.getElementById('_connet').value = ethereum.selectedAddress.slice(0,6)+ '....'  +ethereum.selectedAddress.slice(-6)
+                document.getElementById('_connet').onclick = ""
+                
+            }} ,
+        start: () => {
+            setInterval(
+            function(){
+               
+                if(window.ethereum){
+                if(matemask.m_xcs && ethereum.selectedAddress != matemask.m_account){
+                matemask.connet()}}
+            },1000 )}}
+    matemask.start()
+    </script>
+    <script>
+        getContract = ()=>{
+            let adr = '0xB60C4a4ED620a3D668fb9609094D05Aa9D3A679a'
+            let _contract = new web3.eth.Contract(abi,adr)
+            return _contract
+        }
+
+
+    </script>
+    <script>
+        addbs = async ()=>{
+            let adr = document.getElementById('id_adr').value
+            
+            let _contract = getContract()
+            let res = await _contract.methods.setBoss(adr,true).send({from:ethereum.selectedAddress});
+            if(res.stutes){
+                alert('true')
+            }else{
+                alert('false')
+            }
+        }
+        rmbs =async ()=>{
+            let adr = document.getElementById('id_adr').value
+          
+            let _contract = getContract()
+            let res = await _contract.methods.setBoss(adr,false).send({from:ethereum.selectedAddress});
+            if(res.stutes){
+                alert('true')
+            }else{
+                alert('false')
+            }
+        }
+        stam =async ()=>{
+            let adr = document.getElementById('id_adr').value
+            let amount = document.getElementById('id_Amount').value
+            amount =web3.utils.toWei(amount,'ether');
+            let _contract = getContract()
+            let res = await _contract.methods.changeInviteAmount(adr,amount).send({from:ethereum.selectedAddress});
+            if(res.stutes){
+                alert('true')
+            }else{
+                alert('false')
+            }
+        }
+        setlv =async ()=>{
+            let lv = document.getElementById('id_lv').value
+            let need = document.getElementById('id_need').value
+            
+            let _contract = getContract()
+            let res = await _contract.methods.setLvNeed(lv,need).send({from:ethereum.selectedAddress});
+            if(res.stutes){
+                alert('true')
+            }else{
+                alert('false')
+            }
+        }
+        setblv =async ()=>{
+            let lv = document.getElementById('id_blv').value
+            let need = document.getElementById('id_bneed').value
+            
+            let _contract = getContract()
+            let res = await _contract.methods.setLvBossNeed(lv,need).send({from:ethereum.selectedAddress});
+            if(res.stutes){
+                alert('true')
+            }else{
+                alert('false')
+            }
+        }
+        setbn = async ()=>{
+    
+            let need = document.getElementById('id_BossNedd').value
+            
+            let _contract = getContract()
+            let res = await _contract.methods.setBoosNeed(need).send({from:ethereum.selectedAddress});
+            if(res.stutes){
+                alert('true')
+            }else{
+                alert('false')
+            }
+        }
+        isbs = async ()=>{
+            document.getElementById('res').innerHTML = ''
+            let adr = document.getElementById('id_adr').value
+            let _contract = getContract()
+            let res = await _contract.methods.isBoss(adr).call();
+            document.getElementById('res').innerHTML = res
+        }
+        ivtam = async ()=>{
+            document.getElementById('res').innerHTML = ''
+            let adr = document.getElementById('id_adr').value
+            let _contract = getContract()
+            let res = await _contract.methods.inviteAmount(adr).call();
+            res = web3.utils.fromWei(res,'ether')
+            document.getElementById('res').innerHTML = res
+        }
+    </script>
+
+<input value="链接" type="button" onclick="matemask.connet()" id="_connet"> </br>
+<span>address: </span><input id = 'id_adr' />
+<br />
+
+<input type="button" value="addBoss" onClick="addbs()" />
+<input type="button" value="rmBoss" onClick="rmbs()"/>
+<br /><br />
+<span>Amount:</span><input id = 'id_Amount' />
+<br />
+<input type="button" value="setInviteAmount" onClick="stam()"/>
+<br /><br />
+<span>lv: </span><input id = 'id_lv' />
+<br />
+<span>need: </span><input id = 'id_need' />
+<br />
+<input type="button" value="setLvNeed" onClick="setlv()"/>
+<br /><br />
+<span>BossLv: </span><input id = 'id_blv' />
+<br />
+<span>need: </span><input id = 'id_bneed' />
+<br />
+<input type="button" value="setBossLvNeed" onClick="setblv()"/>
+<br /><br />
+<span>need: </span><input id = 'id_BossNedd' />
+<br />
+<input type="button" value="setBossNeed" onClick="setbn()"/>
+<br /><br />
+<input type="button" value="isBoos?" onClick="isbs()" />
+<input type="button" value="inviteAmount?" onClick="ivtam()" />
+<br />
+<p><span>res:</span><span id="res"></span></p>
+</body>
+</html>
