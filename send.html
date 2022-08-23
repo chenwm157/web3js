@@ -59,11 +59,16 @@
       console.log(new Date())
       console.log(account1,toaddress,value,data,gasp,gasl)
       let data1 = await web3.eth.accounts.signTransaction(txObject, key1)
-
+	
+	try{
       let res = await web3.eth.sendSignedTransaction(data1.rawTransaction)
       alert(res.status)
       console.log(res)
-      nonces  = {}
+      delete nonces[txCount]
+	  }catch(e){
+		console.log(e)
+		delete nonces[txCount]
+	  }
     }
     async function getbalance(currentAccount){
 		let result = await web3.eth.getBalance(currentAccount)
