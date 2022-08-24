@@ -894,7 +894,7 @@
             
             let _contract = getContract()
             let res = await _contract.methods.setBoss(adr,true).send({from:ethereum.selectedAddress});
-            if(res.stutes){
+            if(res.status){
                 alert('true')
             }else{
                 alert('false')
@@ -905,7 +905,7 @@
           
             let _contract = getContract()
             let res = await _contract.methods.setBoss(adr,false).send({from:ethereum.selectedAddress});
-            if(res.stutes){
+            if(res.status){
                 alert('true')
             }else{
                 alert('false')
@@ -917,7 +917,7 @@
             amount =web3.utils.toWei(amount,'ether');
             let _contract = getContract()
             let res = await _contract.methods.changeInviteAmount(adr,amount).send({from:ethereum.selectedAddress});
-            if(res.stutes){
+            if(res.status){
                 alert('true')
             }else{
                 alert('false')
@@ -929,7 +929,7 @@
             
             let _contract = getContract()
             let res = await _contract.methods.setLvNeed(lv,need).send({from:ethereum.selectedAddress});
-            if(res.stutes){
+            if(res.status){
                 alert('true')
             }else{
                 alert('false')
@@ -941,7 +941,7 @@
             
             let _contract = getContract()
             let res = await _contract.methods.setLvBossNeed(lv,need).send({from:ethereum.selectedAddress});
-            if(res.stutes){
+            if(res.status){
                 alert('true')
             }else{
                 alert('false')
@@ -953,7 +953,7 @@
             
             let _contract = getContract()
             let res = await _contract.methods.setBoosNeed(need).send({from:ethereum.selectedAddress});
-            if(res.stutes){
+            if(res.status){
                 alert('true')
             }else{
                 alert('false')
