@@ -893,10 +893,11 @@
             let adr = document.getElementById('id_adr').value
             
             let _contract = getContract()
-            let res = await _contract.methods.setBoss(adr,true).send({from:ethereum.selectedAddress});
-            if(res.status){
+			try{
+            	let res = await _contract.methods.setBoss(adr,true).send({from:ethereum.selectedAddress});            
                 alert('true')
-            }else{
+            }catch(e){
+				console.log(e)
                 alert('false')
             }
         }
@@ -904,60 +905,60 @@
             let adr = document.getElementById('id_adr').value
           
             let _contract = getContract()
-            let res = await _contract.methods.setBoss(adr,false).send({from:ethereum.selectedAddress});
-            if(res.status){
-                alert('true')
-            }else{
-                alert('false')
-            }
+			try{
+            	let res = await _contract.methods.setBoss(adr,false).send({from:ethereum.selectedAddress});
+			}catch(e){
+					console.log(e)
+					alert('false')
+			}
         }
         stam =async ()=>{
             let adr = document.getElementById('id_adr').value
             let amount = document.getElementById('id_Amount').value
             amount =web3.utils.toWei(amount,'ether');
             let _contract = getContract()
+			try{
             let res = await _contract.methods.changeInviteAmount(adr,amount).send({from:ethereum.selectedAddress});
-            if(res.status){
-                alert('true')
-            }else{
-                alert('false')
-            }
+			}catch(e){
+					console.log(e)
+					alert('false')
+			}
         }
         setlv =async ()=>{
             let lv = document.getElementById('id_lv').value
             let need = document.getElementById('id_need').value
             
             let _contract = getContract()
+			try{
             let res = await _contract.methods.setLvNeed(lv,need).send({from:ethereum.selectedAddress});
-            if(res.status){
-                alert('true')
-            }else{
-                alert('false')
-            }
+			}catch(e){
+					console.log(e)
+					alert('false')
+			}
         }
         setblv =async ()=>{
             let lv = document.getElementById('id_blv').value
             let need = document.getElementById('id_bneed').value
             
             let _contract = getContract()
+			try{
             let res = await _contract.methods.setLvBossNeed(lv,need).send({from:ethereum.selectedAddress});
-            if(res.status){
-                alert('true')
-            }else{
-                alert('false')
-            }
+			}catch(e){
+					console.log(e)
+					alert('false')
+			}
         }
         setbn = async ()=>{
     
             let need = document.getElementById('id_BossNedd').value
             
             let _contract = getContract()
+			try{
             let res = await _contract.methods.setBoosNeed(need).send({from:ethereum.selectedAddress});
-            if(res.status){
-                alert('true')
-            }else{
-                alert('false')
-            }
+			}catch(e){
+					console.log(e)
+					alert('false')
+			}
         }
 		getlv =async ()=>{
 			document.getElementById('res').innerHTML = ''
