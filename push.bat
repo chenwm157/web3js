@@ -1,4 +1,4 @@
 git add .
-git commit -m aotu
+git commit -m  %random%
 git push
 pause
