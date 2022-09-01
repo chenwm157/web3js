@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>erc20</title>
+</head>
+<body>
+    <script src="https://cdn.bootcdn.net/ajax/libs/web3/1.7.4/web3.min.js"></script>
+    <script>
+        matemask = {
+        m_account: '',
+		m_xcs: true,
+        connet: () => {
+            matemask.m_xcs = false
+            // var mate = window.ethereum;
+            if(typeof window.ethereum === 'undefined'){
+                alert('未安装钱包')
+            }
+            try{
+                window.ethereum.enable()
+            }catch(err){
+                alert('未通过')
+            }
+            if(!window.ethereum.isConnected()){
+                document.getElementById('_connet').value = "链接"
+                matemask.m_xcs = true
+            }else{
+                window.web3 = new Web3(window.ethereum);
+                // console.log(ethereum.selectedAddress)
+                matemask.m_account = ethereum.selectedAddress;
+                matemask.m_xcs = true
+                document.getElementById('_connet').value = ethereum.selectedAddress.slice(0,6)+ '....'  +ethereum.selectedAddress.slice(-6)
+                document.getElementById('_connet').onclick = ""
+                
+            }} ,
+        start: () => {
+            setInterval(
+            function(){
+               
+                if(window.ethereum){
+                if(matemask.m_xcs && ethereum.selectedAddress != matemask.m_account){
+                matemask.connet()}}
+            },1000 )}}
+    matemask.start()
+    </script>
+    <script>
+        abi = [
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "spender",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "value",
+				"type": "uint256"
+			}
+		],
+		"name": "Approval",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "from",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "value",
+				"type": "uint256"
+			}
+		],
+		"name": "Transfer",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_owner",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "spender",
+				"type": "address"
+			}
+		],
+		"name": "allowance",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "spender",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "approve",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			}
+		],
+		"name": "balanceOf",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "decimals",
+		"outputs": [
+			{
+				"internalType": "uint8",
+				"name": "",
+				"type": "uint8"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "name",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "symbol",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "totalSupply",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "recipient",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "transfer",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "sender",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "recipient",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "transferFrom",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	}
+]
+    </script>
+    <script>
+
+        function jia0(decimal,len){re = "";for(i=0;i<decimal - len ;i++){re+="0"}return re }
+        function redeci(num,decis){
+        num = num.toString()
+		if(num.length <= decis){
+		re = "0." + jia0(decis , num.length) + num
+		return re
+		}
+		re = num.slice(num.length - decis,num.length)
+		re = num.slice(0,length - decis) + "." + num.slice(num.length - decis,num.length)
+		return re
+        }
+
+        todeci = (num,desi) =>{    
+            if(num === 0 || num === '0')return '0'
+            num = num.toString()
+            let re
+            let re2
+            if(num.indexOf('.') !== -1){
+            re = num.split('.')
+            if(re[1].length > desi)re[1] = re[1].slice(0,desi)
+            re2 = re[0] + re[1] +  jia0(desi,re[1].length)
+            }else{
+            re2 = num + jia0(desi,0)
+            }            
+            return re2
+        }
+        getContract = () =>{
+            let adr = document.getElementById('id_contract').value
+            return new web3.eth.Contract(abi,adr)
+        }
+        searApr =async () =>{
+            let _contract = getContract()
+            let adr = document.getElementById('id_tosearapr').value
+            let res = await _contract.methods.allowance(ethereum.selectedAddress,adr).call()
+            let desi = await _contract.methods.decimals().call()
+            res = redeci(res,desi)
+            document.getElementById('id_res').innerHTML = res
+        }
+
+        searbalance =async () =>{
+            let _contract = getContract()
+            let adr = document.getElementById('id_tosearapr').value
+            let res = await _contract.methods.balanceOf(ethereum.selectedAddress).call()
+            let desi = await _contract.methods.decimals().call()
+            res = redeci(res,desi)
+            document.getElementById('id_res').innerHTML = res
+        }
+
+        apr =async () => {
+            let to = document.getElementById('id_aprto').value
+            let amount = document.getElementById('id_amountapr').value
+            
+            let _contract = getContract()
+            let desi = await _contract.methods.decimals().call()
+            amount = todeci(amount,desi)
+            try{
+                let res = await _contract.methods.approve(to,amount).send({from:ethereum.selectedAddress})
+                console.log(res)
+                alert('true')
+            }catch(e){
+                console.log(e)
+                alert('false')
+            }
+        }
+
+        transfer =async ()=> {
+            let to = document.getElementById('id_transferto').value
+            let amount = document.getElementById('id_transferamount').value
+            let _contract = getContract()
+
+            let desi = await _contract.methods.decimals().call()
+            amount = todeci(amount,desi)
+            try{
+                let res = await _contract.methods.transfer(to,amount).send({from:ethereum.selectedAddress})
+                console.log(res)
+                alert('true')
+            }catch(e){
+                console.log(e)
+                alert('false')
+            }
+        }
+
+        transferfrom =async ()=> {
+            let from = document.getElementById('id_transferfromFrom').value 
+            let to = document.getElementById('id_transferfromto').value
+            let amount = document.getElementById('id_transferfromamount').value
+            let _contract = getContract()
+
+            let desi = await _contract.methods.decimals().call()
+            amount = todeci(amount,desi)
+            try{
+                let res = await _contract.methods.transferFrom(from,to,amount).send({from:ethereum.selectedAddress})
+                console.log(res)
+                alert('true')
+            }catch(e){
+                console.log(e)
+                alert('false')
+            }
+        }
+
+    </script>
+
+    <p><input value="链接" type="button" onclick="matemask.connet()" id="_connet"> </p>
+    <p><span>合约地址:</span><input type="text" id="id_contract"> </p>
+    <p>查授权：</p>
+    <span>to:</span><input type="text" id="id_tosearapr"> <br />
+    <button onClick="searApr()">sure</button>    
+    <p><button onClick="searbalance()">查余额</button></p>
+    <p>授权:</p>    
+    <span>to:</span><input type="text" id="id_aprto"> <br />
+    <span>amount:</span><input type="text" id="id_amountapr"> <br />
+    <button onClick="apr()">sure</button>
+    <p>转账:</p>
+    <span>to:</span><input type="text" id="id_transferto"> <br />
+    <span>amount:</span><input type="text" id="id_transferamount"> <br />
+    <button onClick="transfer()">sure</button>
+
+    <p>代转账:</p>
+    <span>from:</span><input type="text" id="id_transferfromFrom"> <br /> 
+    <span>to:</span><input type="text" id="id_transferfromto"> <br />
+    <span>amount:</span><input type="text" id="id_transferfromamount"> <br />
+    <button onClick="transferfrom()">sure</button>
+
+    <p><span>res: </span><span id="id_res"></span></p>
+</body>
+</html>
