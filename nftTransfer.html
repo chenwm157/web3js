@@ -84,10 +84,12 @@ transation = async ()=>{
           tokenid = window.document.getElementById('id_tokenid').value
 
           _contract = new web3.eth.Contract(abi,conadr)
-          res = await _contract.methods.transferFrom(ethereum.selectedAddress,to,tokenid).send({from:ethereum.selectedAddress})
-          if(res.status){
+          try{
+            res = await _contract.methods.transferFrom(ethereum.selectedAddress,to,tokenid).send({from:ethereum.selectedAddress})
+            console.log(res)
             window.document.getElementById('id_res').innerHTML = '转账失败'
-          }else{
+          }catch(e){
+            console.log(e)
             window.document.getElementById('id_res').innerHTML = '转账成功'
           }
         }
