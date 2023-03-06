@@ -26,7 +26,9 @@
             // console.log(res.data.data)
             if(res.data.data.length > 0){
                 document.write(hg)
+                document.write('<span>')
                 document.write(_address)
+                document.write('</span>')
                 document.write(hg)
                 
             }
@@ -39,13 +41,22 @@
                     a = t/1000 + 60*60*24*3 - s/1000  
                     h = 0
                     m = 0
+                    s = 0
                     if(a>0){       
                         h = parseInt(a/60/60)
-                        m = parseInt(a/60%60) 
+                        m = parseInt(a/60%60)
+                        s = parseInt(a%60) 
                     }
-                    str = '质押数量:' +  (num/1000000).toString() +'  ' + '剩余时间:' + (h).toString() + ':' + (m).toString()
-                   
+                    // num传入的数字，n需要的字符长度
+                    function PrefixInteger(num, n) {
+                        return (Array(n).join(0) + num).slice(-n);
+                    }
+                    
+                    str = '质押数量:' +  (num/1000000).toString() +'    ' + '剩余时间:' + PrefixInteger(h,2) + ':' + PrefixInteger(m,2) + ':' + PrefixInteger(s,2)
+                    
+                    document.write('<span>')
                     document.write(str)
+                    document.write('</span>')
                     document.write(hg)
                 }
                 
