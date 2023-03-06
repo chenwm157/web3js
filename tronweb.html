@@ -7,6 +7,14 @@
     <title>tronweb</title>
 </head>
 <body>
+    <table id="tb">
+        <tr>
+            <th>地址</th>
+            <th>质押数量</th>
+            <th>解锁时间</th>
+        </tr>
+        
+    </table>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
         addresss=[ 
@@ -19,19 +27,9 @@
 
         getdata = async(_address)=>{      
 
-            hg = '</br>'	
-            
             url = 'https://apilist.tronscanapi.com/api/account/resource?limit=500&start=0&address='+ _address +'&type=2&resourceType=0'
             res = await axios.get(url)
-            // console.log(res.data.data)
-            if(res.data.data.length > 0){
-                document.write(hg)
-                document.write('<span>')
-                document.write(_address)
-                document.write('</span>')
-                document.write(hg)
-                
-            }
+            
             for(i=0;i<res.data.data.length;i++){
                     // console.log(res.data.data[i])
                     num = res.data.data[i].frozenBalance
@@ -52,16 +50,28 @@
                         return (Array(n).join(0) + num).slice(-n);
                     }
                     
-                    str = '质押数量:' +  (num/1000000).toString() +'    ' + '剩余时间:' + PrefixInteger(h,2) + ':' + PrefixInteger(m,2) + ':' + PrefixInteger(s,2)
+                    t = PrefixInteger(h,2) + ':' + PrefixInteger(m,2) + ':' + PrefixInteger(s,2)
                     
-                    document.write('<span>')
-                    document.write(str)
-                    document.write('</span>')
-                    document.write(hg)
+                    
+                    doc = document.getElementById('tb')
+                   
+                    tr = document.createElement('tr')
+                    td1 = document.createElement('td')
+                    td1.innerHTML = _address.slice(0,4) + '...' + _address.slice(-4)
+                    td2 = document.createElement('td')
+                    td2.innerHTML = num/1000000
+                    td3 = document.createElement('td')
+                    td3.innerHTML = t
+                    tr.appendChild(td1)
+                    tr.appendChild(td2)
+                    tr.appendChild(td3)
+                    doc.appendChild(tr)
+
                 }
                 
         }
         main = ()=>{
+            
             for(adr = 0;adr<addresss.length;adr++){                  
                
                 ((_adr)=>{
