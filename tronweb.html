@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tronweb</title>
+</head>
+<body>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        addresss=[ 
+            'TCq5Vce9FAH8nAphK2jB1uDmeUfqKELzBB',    
+            'TMMWFvGMjhhSvEhYyq4SKebhWFaxvCRvPq',    
+            'TVNtPWTtxm8txaijowbPgNbskcZC4K6HXk',    
+            'TUh1R5t6Yri3gAvRC29Z5QeSVGnttpde3h',    
+            'TPTmpaKuzxQ3AMoVp8S3PfQCW6L5xXMG1x'     
+        ]
+
+        getdata = async(_address)=>{      
+
+            hg = '</br>'	
+            
+            url = 'https://apilist.tronscanapi.com/api/account/resource?limit=500&start=0&address='+ _address +'&type=2&resourceType=0'
+            res = await axios.get(url)
+            // console.log(res.data.data)
+            if(res.data.data.length > 0){
+                document.write(_address)
+                document.write(hg)
+            }
+            for(i=0;i<res.data.data.length;i++){
+                    // console.log(res.data.data[i])
+                    num = res.data.data[i].frozenBalance
+                    t = res.data.data[i].timestamp
+                    // console.log(num,t)
+                    s = new Date().getTime()
+                    a = t/1000 + 60*60*24*3 - s/1000         
+                    h = parseInt(a/60/60)
+                    m = parseInt(a/60%60) 
+                    str = '质押数量:' +  (num/1000000).toString() +'  ' + '剩余时间:' + (h).toString() + ':' + (m).toString()
+                  
+                    document.write(str)
+                    document.write(hg)
+                }
+        }
+        main = ()=>{
+            for(adr = 0;adr<addresss.length;adr++){                  
+               
+                ((_adr)=>{
+                    setTimeout(()=>{getdata(_adr)},(adr+1)*300)
+                })(addresss[adr])
+      
+            }
+        }
+        main()
+    </script>
+</body>
+</html>
