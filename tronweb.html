@@ -106,7 +106,8 @@
                         return (Array(n).join(0) + num).slice(-n);
                     }
                     
-                    t3 = PrefixInteger(h,2) + ':' + PrefixInteger(m,2) + ':' + PrefixInteger(s,2)
+                    // t3 = PrefixInteger(h,2) + ':' + PrefixInteger(m,2) + ':' + PrefixInteger(s,2)
+                    t3 =   h.toString() + ' h ' //+ m.toString() + ' m'
                     t1 = new Date(t + 60*60*24*3*1000)
                     t2 = t1.format("hh:mm:ss")
                     
