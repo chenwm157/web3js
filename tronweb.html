@@ -108,7 +108,7 @@
                     
                     t3 = PrefixInteger(h,2) + ':' + PrefixInteger(m,2) + ':' + PrefixInteger(s,2)
                     t1 = new Date(t + 60*60*24*3*1000)
-                    t2 = t1.format("yyyy-MM-dd hh:mm:ss")
+                    t2 = t1.format("hh:mm:ss")
                     
                     zysl.push(num/1000000)
                     jssj.push(t2)   
@@ -121,7 +121,7 @@
                     if(i == 0){
                         tr = document.createElement('tr')
                         td1 = document.createElement('td')
-                        td1.innerHTML = _address.slice(0,6) + '...' + _address.slice(-6)
+                        td1.innerHTML = _address.slice(0,2) + '...' + _address.slice(-4)
                         td1.rowSpan = zysl.length
                         td2 = document.createElement('td')
                         td2.innerHTML = zysl[i]
