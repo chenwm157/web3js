@@ -40,6 +40,7 @@
             <th>地址</th>
             <th>质押数量</th>
             <th>解锁时间</th>
+            <th>倒计时</th>
         </tr>
         
     </table>
@@ -53,6 +54,28 @@
             'TPTmpaKuzxQ3AMoVp8S3PfQCW6L5xXMG1x'     
         ]
 
+        Date.prototype.format = function(fmt) { 
+            var o = { 
+                "M+" : this.getMonth()+1,                 //月份 
+                "d+" : this.getDate(),                    //日 
+                "h+" : this.getHours(),                   //小时 
+                "m+" : this.getMinutes(),                 //分 
+                "s+" : this.getSeconds(),                 //秒 
+                "q+" : Math.floor((this.getMonth()+3)/3), //季度 
+                "S"  : this.getMilliseconds()             //毫秒 
+            }; 
+            if(/(y+)/.test(fmt)) {
+                    fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length)); 
+            }
+            for(var k in o) {
+                if(new RegExp("("+ k +")").test(fmt)){
+                    fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+                }
+            }
+            return fmt; 
+        }    
+
+
         getdata = async(_address)=>{      
 
             url = 'https://apilist.tronscanapi.com/api/account/resource?limit=500&start=0&address='+ _address +'&type=2&resourceType=0'
@@ -60,6 +83,7 @@
 
             zysl = []
             jssj = []
+            djs = []
             
             for(i=0;i<res.data.data.length;i++){
                     // console.log(res.data.data[i])
@@ -67,6 +91,7 @@
                     t = res.data.data[i].timestamp
                     // console.log(num,t)
                     s = new Date().getTime()
+                    s2 = s 
                     a = t/1000 + 60*60*24*3 - s/1000  
                     h = 0
                     m = 0
@@ -81,10 +106,13 @@
                         return (Array(n).join(0) + num).slice(-n);
                     }
                     
-                    t = PrefixInteger(h,2) + ':' + PrefixInteger(m,2) + ':' + PrefixInteger(s,2)
+                    t3 = PrefixInteger(h,2) + ':' + PrefixInteger(m,2) + ':' + PrefixInteger(s,2)
+                    t1 = new Date(t + 60*60*24*3*1000)
+                    t2 = t1.format("yyyy-MM-dd hh:mm:ss")
                     
                     zysl.push(num/1000000)
-                    jssj.push(t)                    
+                    jssj.push(t2)   
+                    djs.push(t3)                 
 
                 }
 
@@ -99,9 +127,12 @@
                         td2.innerHTML = zysl[i]
                         td3 = document.createElement('td')
                         td3.innerHTML = jssj[i]
+                        td4 = document.createElement('td')
+                        td4.innerHTML = djs[i]
                         tr.appendChild(td1)
                         tr.appendChild(td2)
                         tr.appendChild(td3)
+                        tr.appendChild(td4)
                         doc.appendChild(tr)
                     }else{
                         tr = document.createElement('tr')
@@ -112,9 +143,12 @@
                         td2.innerHTML = zysl[i]
                         td3 = document.createElement('td')
                         td3.innerHTML = jssj[i]
+                        td4 = document.createElement('td')
+                        td4.innerHTML = djs[i]
                         // tr.appendChild(td1)
                         tr.appendChild(td2)
                         tr.appendChild(td3)
+                        tr.appendChild(td4)
                         doc.appendChild(tr)
                     }
                 }
