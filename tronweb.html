@@ -50,7 +50,7 @@
             'TCq5Vce9FAH8nAphK2jB1uDmeUfqKELzBB',    
             'TMMWFvGMjhhSvEhYyq4SKebhWFaxvCRvPq',    
             'TVNtPWTtxm8txaijowbPgNbskcZC4K6HXk',    
-            'TUh1R5t6Yri3gAvRC29Z5QeSVGnttpde3h',    
+            // 'TUh1R5t6Yri3gAvRC29Z5QeSVGnttpde3h',    
             'TPTmpaKuzxQ3AMoVp8S3PfQCW6L5xXMG1x'     
         ]
 
@@ -78,7 +78,8 @@
 
         getdata = async(_address)=>{      
 
-            url = 'https://apilist.tronscanapi.com/api/account/resource?limit=500&start=0&address='+ _address +'&type=2&resourceType=0'
+            url = 'https://apilist.tronscanapi.com/api/account/resourcev2?limit=10&start=0&address='+_address+'&type=2'
+            // url = 'https://apilist.tronscanapi.com/api/account/resource?limit=500&start=0&address='+ _address +'&type=2&resourceType=0'
             res = await axios.get(url)
 
             zysl = []
@@ -87,12 +88,12 @@
             
             for(i=0;i<res.data.data.length;i++){
                     // console.log(res.data.data[i])
-                    num = res.data.data[i].frozenBalance
-                    t = res.data.data[i].timestamp
+                    num = res.data.data[i].balance
+                    t = res.data.data[i].expireTime
                     // console.log(num,t)
                     s = new Date().getTime()
                     s2 = s 
-                    a = t/1000 + 60*60*24*3 - s/1000  
+                    a = t/1000  - s/1000  //+ 60*60*24*3
                     h = 0
                     m = 0
                     s = 0
@@ -108,7 +109,7 @@
                     
                     // t3 = PrefixInteger(h,2) + ':' + PrefixInteger(m,2) + ':' + PrefixInteger(s,2)
                     t3 =   h.toString() + ' h ' //+ m.toString() + ' m'
-                    t1 = new Date(t + 60*60*24*3*1000)
+                    t1 = new Date(t ) //+ 60*60*24*3*1000)
                     t2 = t1.format("hh:mm:ss")
                     
                     zysl.push(num/1000000)
