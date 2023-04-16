@@ -41,6 +41,7 @@
             <th>质押数量</th>
             <th>解锁时间</th>
             <th>倒计时</th>
+            <th>能量</th>
         </tr>
         
     </table>
@@ -82,9 +83,18 @@
             // url = 'https://apilist.tronscanapi.com/api/account/resource?limit=500&start=0&address='+ _address +'&type=2&resourceType=0'
             res = await axios.get(url)
 
+            url2 = 'https://apilist.tronscanapi.com/api/accountv2?address=' + _address
+            res2 = await axios.get(url2)
+            energyRemaining = parseInt( res2.data['bandwidth']['energyRemaining'] / 10000 )
+            energyLimit = parseInt(res2.data['bandwidth']['energyLimit'] / 10000 )
+
+            // console.log(energyRemaining,energyLimit)
+
             zysl = []
             jssj = []
             djs = []
+            energy = `${energyRemaining}/${energyLimit} w`
+            console.log(energy)
             
             for(i=0;i<res.data.data.length;i++){
                     // console.log(res.data.data[i])
@@ -131,10 +141,14 @@
                         td3.innerHTML = jssj[i]
                         td4 = document.createElement('td')
                         td4.innerHTML = djs[i]
+                        td5 = document.createElement('td')
+                        td5.innerHTML = energy
+                        td5.rowSpan = zysl.length
                         tr.appendChild(td1)
                         tr.appendChild(td2)
                         tr.appendChild(td3)
                         tr.appendChild(td4)
+                        tr.appendChild(td5)
                         doc.appendChild(tr)
                     }else{
                         tr = document.createElement('tr')
