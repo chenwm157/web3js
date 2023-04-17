@@ -193,14 +193,14 @@
                 
                 
         }
-        main = ()=>{
+        main =async ()=>{
             
             for(adr = 0;adr<addresss.length;adr++){                  
                
-                ((_adr)=>{
-                    setTimeout(()=>{getdata(_adr)},(adr+1)*1000)
-                })(addresss[adr])
-      
+//                 ((_adr)=>{
+//                     setTimeout(()=>{getdata(_adr)},(adr+1)*1000)
+//                 })(addresss[adr])
+                await getdata(addresss[adr])
             }
         }
         main()
