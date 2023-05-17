@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tronweb</title>
+</head>
+<body>
+    <style>
+        table {
+            /* border-right: 1px solid #000000;
+            border-bottom: 1px solid #000000; */
+            border-collapse:collapse;
+            border: 1px solid #000000;
+            text-align: center;
+            width:auto;
+            margin:0 auto;
+            margin-top:20px;
+        }
+        
+        table th {
+            border-collapse:collapse;
+            border: 1px solid #000000;
+            /* border-left: 1px solid #000000;
+            border-top: 1px solid #000000; */
+            padding: 10px;
+        }
+        
+        table td {
+            border-collapse:collapse;
+            border: 1px solid #000000;
+            /* border-left: 1px solid #000000;
+            border-top: 1px solid #000000; */
+            padding: 10px;
+        }
+    </style>
+    <table id="tb">
+        <tr>
+            <th>地址</th>
+            <th>质押数量</th>
+            <th>解锁时间</th>
+            <th>倒计时</th>
+            <th>能量</th>
+            <th>余额</th>
+        </tr>
+        
+    </table>
+    <script src="TronWeb.js"></script>
+    <script>
+        const tronWeb = new TronWeb({
+        fullHost: 'https://api.trongrid.io',  
+        })
+
+
+        adrs=[ 
+            'TCq5Vce9FAH8nAphK2jB1uDmeUfqKELzBB',    
+            'TMMWFvGMjhhSvEhYyq4SKebhWFaxvCRvPq',    
+            'TVNtPWTtxm8txaijowbPgNbskcZC4K6HXk',   
+            'TPTmpaKuzxQ3AMoVp8S3PfQCW6L5xXMG1x'     
+        ]
+
+        datas = {}
+        ser =async (adr) => {
+            // console.log(tronWeb)    
+            datas[adr] = []
+            let Resource = await tronWeb.trx.getDelegatedResourceAccountIndexV2(adr)
+            let toAccounts = Resource.toAccounts
+            // console.log(toAccounts)
+            
+            for(let i=0;i<toAccounts.length;i++){
+                ds = {
+                    'to':toAccounts[i],
+                    'trx':0,
+                    'time':0,
+                    'sun':0,
+                    'hour':0
+                }
+                acc = toAccounts[i]
+                let rs1 = await tronWeb.trx.getDelegatedResourceV2(adr,acc)       
+                
+                if(rs1.delegatedResource){
+                    for(let j=0;j<rs1.delegatedResource.length;j++){                
+                        ds['sun'] += rs1.delegatedResource[j].frozen_balance_for_energy
+                        
+                        if( rs1.delegatedResource[j].expire_time_for_energy && rs1.delegatedResource[j].expire_time_for_energy > ds['time']){                    
+                            ds['time'] = rs1.delegatedResource[j].expire_time_for_energy
+                            hour = (ds['time'] - Date.now()) / 1000 / 60 / 60
+                            if(hour < 0)hour = 0
+                            ds['hour'] = parseInt(hour)
+                        }
+                    }
+                }
+                ds['trx'] = parseInt( ds['sun'] / 1000000 )
+                datas[adr].push(ds)
+            }
+            
+
+        }
+
+        Date.prototype.format = function(fmt) { 
+            var o = { 
+                "M+" : this.getMonth()+1,                 //月份 
+                "d+" : this.getDate(),                    //日 
+                "h+" : this.getHours(),                   //小时 
+                "m+" : this.getMinutes(),                 //分 
+                "s+" : this.getSeconds(),                 //秒 
+                "q+" : Math.floor((this.getMonth()+3)/3), //季度 
+                "S"  : this.getMilliseconds()             //毫秒 
+            }; 
+            if(/(y+)/.test(fmt)) {
+                    fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length)); 
+            }
+            for(var k in o) {
+                if(new RegExp("("+ k +")").test(fmt)){
+                    fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+                }
+            }
+            return fmt; 
+        }    
+
+        energy = {}
+        ser2 = async (adr)=> {
+            let res = await tronWeb.trx.getAccountResources(adr);
+            energy[adr] = parseInt((res.EnergyLimit - res.EnergyUsed) / 10000).toString()
+            energy[adr] += '/'
+            energy[adr] += parseInt((res.EnergyLimit) / 10000).toString()
+            // energy[adr] += ' w'
+            
+        }
+        balances = {}
+        ser3 = async (adr)=> {
+            let res = await tronWeb.trx.getBalance(adr);
+            balances[adr] = parseInt(  res / 1000000 )
+            
+        }
+        main = async ()=>{
+            doc = document.getElementById('tb')
+            for(let ii=0;ii<adrs.length;ii++){
+                await ser(adrs[ii])  
+                await ser2(adrs[ii])  
+                await ser3(adrs[ii])  
+                
+                data = datas[adrs[ii]]
+                console.log(data)
+                for(let i=0;i<data.length;i++) {
+                    t1 = new Date(data[i]['time'] ) //+ 60*60*24*3*1000)
+                    t2 = t1.format("hh:mm:ss")
+                    if(i == 0){                        
+
+                        tr = document.createElement('tr')
+                        td1 = document.createElement('td')
+                        td1.innerHTML = adrs[ii].slice(0,1) + '..' + adrs[ii].slice(-3)
+                        td1.rowSpan = data.length
+                        td2 = document.createElement('td')
+                        td2.innerHTML = data[i]['trx']
+                        td3 = document.createElement('td')
+                        td3.innerHTML = t2//jssj[i]
+                        td4 = document.createElement('td')
+                        td4.innerHTML = data[i]['hour']
+                        td5 = document.createElement('td')
+                        td5.innerHTML = energy[adrs[ii]] //energy
+                        td5.rowSpan = data.length
+                        td6 = document.createElement('td')
+                        td6.innerHTML = balances[adrs[ii]] //energy
+                        td6.rowSpan = data.length
+                        tr.appendChild(td1)
+                        tr.appendChild(td2)
+                        tr.appendChild(td3)
+                        tr.appendChild(td4)
+                        tr.appendChild(td5)
+                        tr.appendChild(td6)
+                        doc.appendChild(tr)
+                    }else{
+                        tr = document.createElement('tr')
+                        // td1 = document.createElement('td')
+                        // td1.innerHTML = _address.slice(0,4) + '...' + _address.slice(-4)
+                        // td1.colSpan = zysl.length
+                        td2 = document.createElement('td')
+                        td2.innerHTML = data[i]['trx']
+                        td3 = document.createElement('td')
+                        td3.innerHTML = t2
+                        td4 = document.createElement('td')
+                        td4.innerHTML = data[i]['hour']
+                        // tr.appendChild(td1)
+                        tr.appendChild(td2)
+                        tr.appendChild(td3)
+                        tr.appendChild(td4)
+                        doc.appendChild(tr)
+                    }
+                }
+
+                if(data.length == 0){
+                    tr = document.createElement('tr')
+                        td1 = document.createElement('td')
+                        td1.innerHTML = _address.slice(0,2) + '...' + _address.slice(-4)
+                        // td1.rowSpan = zysl.length
+                        td2 = document.createElement('td')
+                        // td2.innerHTML = zysl[i]
+                        td3 = document.createElement('td')
+                        // td3.innerHTML = jssj[i]
+                        td4 = document.createElement('td')
+                        // td4.innerHTML = djs[i]
+                        td5 = document.createElement('td')
+                        td5.innerHTML = energy
+                        // td5.rowSpan = zysl.length
+                        tr.appendChild(td1)
+                        tr.appendChild(td2)
+                        tr.appendChild(td3)
+                        tr.appendChild(td4)
+                        tr.appendChild(td5)
+                        doc.appendChild(tr)
+                }
+            }
+
+            
+
+            console.log(datas)
+        }
+        main()
+
+    </script>
+    <!-- <script src="axios.min.js"></script> -->
+    <!-- <script>
+        addresss=[ 
+            'TCq5Vce9FAH8nAphK2jB1uDmeUfqKELzBB',    
+            'TMMWFvGMjhhSvEhYyq4SKebhWFaxvCRvPq',    
+            'TVNtPWTtxm8txaijowbPgNbskcZC4K6HXk',    
+            // 'TUh1R5t6Yri3gAvRC29Z5QeSVGnttpde3h',    
+            'TPTmpaKuzxQ3AMoVp8S3PfQCW6L5xXMG1x'     
+        ]
+
+        Date.prototype.format = function(fmt) { 
+            var o = { 
+                "M+" : this.getMonth()+1,                 //月份 
+                "d+" : this.getDate(),                    //日 
+                "h+" : this.getHours(),                   //小时 
+                "m+" : this.getMinutes(),                 //分 
+                "s+" : this.getSeconds(),                 //秒 
+                "q+" : Math.floor((this.getMonth()+3)/3), //季度 
+                "S"  : this.getMilliseconds()             //毫秒 
+            }; 
+            if(/(y+)/.test(fmt)) {
+                    fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length)); 
+            }
+            for(var k in o) {
+                if(new RegExp("("+ k +")").test(fmt)){
+                    fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+                }
+            }
+            return fmt; 
+        }    
+
+
+        getdata = async(_address)=>{      
+
+            url = 'https://apilist.tronscanapi.com/api/account/resourcev2?limit=30&start=0&address='+_address+'&type=2'
+            // url = 'https://apilist.tronscanapi.com/api/account/resource?limit=500&start=0&address='+ _address +'&type=2&resourceType=0'
+            res = await axios.get(url)
+
+            url2 = 'https://apilist.tronscanapi.com/api/accountv2?address=' + _address
+            res2 = await axios.get(url2)
+            energyRemaining = parseInt( res2.data['bandwidth']['energyRemaining'] / 10000 )
+            energyLimit = parseInt(res2.data['bandwidth']['energyLimit'] / 10000 )
+
+            // console.log(energyRemaining,energyLimit)
+
+            zysl = []
+            jssj = []
+            djs = []
+            energy = `${energyRemaining}/${energyLimit} w`
+            console.log(energy)
+            
+            for(i=0;i<res.data.data.length;i++){
+                    // console.log(res.data.data[i])
+                    num = res.data.data[i].balance
+                    t = res.data.data[i].expireTime
+                    // console.log(num,t)
+                    s = new Date().getTime()
+                    s2 = s 
+                    a = t/1000  - s/1000  //+ 60*60*24*3
+                    h = 0
+                    m = 0
+                    s = 0
+                    if(a>0){       
+                        h = parseInt(a/60/60)
+                        m = parseInt(a/60%60)
+                        s = parseInt(a%60) 
+                    }
+                    // num传入的数字，n需要的字符长度
+                    function PrefixInteger(num, n) {
+                        return (Array(n).join(0) + num).slice(-n);
+                    }
+                    
+                    // t3 = PrefixInteger(h,2) + ':' + PrefixInteger(m,2) + ':' + PrefixInteger(s,2)
+                    t3 =   h.toString() + ' h ' //+ m.toString() + ' m'
+                    t1 = new Date(t ) //+ 60*60*24*3*1000)
+                    t2 = t1.format("hh:mm:ss")
+					
+					_sl = parseInt( num/1000000)
+					if(_sl > 0){                    
+						zysl.push(parseInt( num/1000000))
+						jssj.push(t2)   
+						djs.push(t3)                 
+					}
+                }
+
+                doc = document.getElementById('tb')
+                for(i=0;i<zysl.length;i++) {
+                    if(i == 0){
+                        tr = document.createElement('tr')
+                        td1 = document.createElement('td')
+                        td1.innerHTML = _address.slice(0,2) + '...' + _address.slice(-4)
+                        td1.rowSpan = zysl.length
+                        td2 = document.createElement('td')
+                        td2.innerHTML = zysl[i]
+                        td3 = document.createElement('td')
+                        td3.innerHTML = jssj[i]
+                        td4 = document.createElement('td')
+                        td4.innerHTML = djs[i]
+                        td5 = document.createElement('td')
+                        td5.innerHTML = energy
+                        td5.rowSpan = zysl.length
+                        tr.appendChild(td1)
+                        tr.appendChild(td2)
+                        tr.appendChild(td3)
+                        tr.appendChild(td4)
+                        tr.appendChild(td5)
+                        doc.appendChild(tr)
+                    }else{
+                        tr = document.createElement('tr')
+                        // td1 = document.createElement('td')
+                        // td1.innerHTML = _address.slice(0,4) + '...' + _address.slice(-4)
+                        // td1.colSpan = zysl.length
+                        td2 = document.createElement('td')
+                        td2.innerHTML = zysl[i]
+                        td3 = document.createElement('td')
+                        td3.innerHTML = jssj[i]
+                        td4 = document.createElement('td')
+                        td4.innerHTML = djs[i]
+                        // tr.appendChild(td1)
+                        tr.appendChild(td2)
+                        tr.appendChild(td3)
+                        tr.appendChild(td4)
+                        doc.appendChild(tr)
+                    }
+                }
+
+                if(zysl.length == 0){
+                    tr = document.createElement('tr')
+                        td1 = document.createElement('td')
+                        td1.innerHTML = _address.slice(0,2) + '...' + _address.slice(-4)
+                        // td1.rowSpan = zysl.length
+                        td2 = document.createElement('td')
+                        // td2.innerHTML = zysl[i]
+                        td3 = document.createElement('td')
+                        // td3.innerHTML = jssj[i]
+                        td4 = document.createElement('td')
+                        // td4.innerHTML = djs[i]
+                        td5 = document.createElement('td')
+                        td5.innerHTML = energy
+                        // td5.rowSpan = zysl.length
+                        tr.appendChild(td1)
+                        tr.appendChild(td2)
+                        tr.appendChild(td3)
+                        tr.appendChild(td4)
+                        tr.appendChild(td5)
+                        doc.appendChild(tr)
+                }
+                
+                
+        }
+        main =async ()=>{
+            
+            for(adr = 0;adr<addresss.length;adr++){                  
+               
+//                 ((_adr)=>{
+//                     setTimeout(()=>{getdata(_adr)},(adr+1)*1000)
+//                 })(addresss[adr])
+                await getdata(addresss[adr])
+            }
+        }
+        main()
+    </script> -->
+</body>
+</html>
