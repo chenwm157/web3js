@@ -42,15 +42,14 @@
             <th>解锁时间</th>
             <th>倒计时</th>
             <th>能量</th>
-            <th>余额</th>
+            <!-- <th>余额</th> -->
         </tr>
         
     </table>
     <script src="TronWeb.js"></script>
     <script>
         const tronWeb = new TronWeb({
-        //fullHost: 'https://api.trongrid.io',  
-	fullHost:'https://trx.mytokenpocket.vip',
+        fullHost: 'https://api.trongrid.io',  
         })
 
 
@@ -151,7 +150,7 @@
 
                         tr = document.createElement('tr')
                         td1 = document.createElement('td')
-                        td1.innerHTML = adrs[ii].slice(0,1) + '..' + adrs[ii].slice(-3)
+                        td1.innerHTML = adrs[ii].slice(0,1) + '..' + adrs[ii].slice(-3) 
                         td1.rowSpan = data.length
                         td2 = document.createElement('td')
                         td2.innerHTML = data[i]['trx']
@@ -160,17 +159,17 @@
                         td4 = document.createElement('td')
                         td4.innerHTML = data[i]['hour']
                         td5 = document.createElement('td')
-                        td5.innerHTML = energy[adrs[ii]] //energy
+                        td5.innerHTML = energy[adrs[ii]] + '</br>' + balances[adrs[ii]] //energy
                         td5.rowSpan = data.length
-                        td6 = document.createElement('td')
-                        td6.innerHTML = balances[adrs[ii]] //energy
-                        td6.rowSpan = data.length
+                        // td6 = document.createElement('td')
+                        // td6.innerHTML = balances[adrs[ii]] //energy
+                        // td6.rowSpan = data.length
                         tr.appendChild(td1)
                         tr.appendChild(td2)
                         tr.appendChild(td3)
                         tr.appendChild(td4)
                         tr.appendChild(td5)
-                        tr.appendChild(td6)
+                        // tr.appendChild(td6)
                         doc.appendChild(tr)
                     }else{
                         tr = document.createElement('tr')
