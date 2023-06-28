@@ -67,7 +67,7 @@
             let Resource = await tronWeb.trx.getDelegatedResourceAccountIndexV2(adr)
             let toAccounts = Resource.toAccounts
             // console.log(toAccounts)
-            
+            try{
             for(let i=0;i<toAccounts.length;i++){
                 ds = {
                     'to':toAccounts[i],
@@ -93,7 +93,7 @@
                 }
                 ds['trx'] = parseInt( ds['sun'] / 1000000 )
                 datas[adr].push(ds)
-            }
+            }}catch(e){console.log(e)}
             
 
         }
@@ -193,7 +193,7 @@
                 if(data.length == 0){
                     tr = document.createElement('tr')
                         td1 = document.createElement('td')
-                        td1.innerHTML = _address.slice(0,2) + '...' + _address.slice(-4)
+                        td1.innerHTML = adrs[ii].slice(0,2) + '...' + adrs[ii].slice(-4)
                         // td1.rowSpan = zysl.length
                         td2 = document.createElement('td')
                         // td2.innerHTML = zysl[i]
