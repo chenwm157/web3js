@@ -51,8 +51,15 @@
             'TCq5Vce9FAH8nAphK2jB1uDmeUfqKELzBB',    
             'TMMWFvGMjhhSvEhYyq4SKebhWFaxvCRvPq',    
             'TVNtPWTtxm8txaijowbPgNbskcZC4K6HXk',    
-            // 'TUh1R5t6Yri3gAvRC29Z5QeSVGnttpde3h',    
-            'TPTmpaKuzxQ3AMoVp8S3PfQCW6L5xXMG1x'     
+            'TUh1R5t6Yri3gAvRC29Z5QeSVGnttpde3h',    
+            'TPTmpaKuzxQ3AMoVp8S3PfQCW6L5xXMG1x',
+	    'TVNtPWTtxm8txaijowbPgNbskcZC4K6HXk',
+	    'TLLGDjJudRv8ugRcHgeRKWabsFJjcQ5iPR',
+	    'TFQWKLpMSxX6qTWb4ErzZLctoCauXnTYq6',
+	    'TR1tn6doTxwya8nVoTNwXSBcUaJWmWQ1Q6',
+	    'TBrLZJJUgqs2nBjeh8fBKgfgydnZMobMNV',
+	    'TDBe1E8cuTk2cuAurQYigmHjV1Z6sU9MrH',
+	    'TSM8nNfyvcdJMHcDbWsYBeH6h9TmoiN2X9'
         ]
 
         Date.prototype.format = function(fmt) { 
@@ -93,8 +100,11 @@
             zysl = []
             jssj = []
             djs = []
-            energy = `${energyRemaining}/${energyLimit} w`
+            energy = `${energyRemaining}/${energyLimit}`
             console.log(energy)
+	    balance = parseInt( res2.data['balance'] / 1000000 )
+            energy = energy +  '</br>' + balance
+		
             
             for(i=0;i<res.data.data.length;i++){
                     // console.log(res.data.data[i])
